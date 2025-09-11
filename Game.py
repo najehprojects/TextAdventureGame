@@ -54,7 +54,7 @@ while plr["name"] == "":
 
 showstats()
 
-def difficultyselect():
+def difficulty_select():
 
     animatetxt("Choose Your Difficulty", 3)
     plr["dif"] = input("[Easy/Normal/Hard/Impossible] ")
@@ -74,7 +74,7 @@ def difficultyselect():
     plr["dif"] = plr["dif"].upper()
     animatetxt("Selected Difficulty "+ plr["dif"], 3)
 
-difficultyselect()
+difficulty_select()
 
 difCon = input("Are you sure you would like to proceed with difficulty "+ plr["dif"]+"? "+ "[Y/N]: ")
 while difCon.upper() != "Y":
@@ -83,9 +83,50 @@ while difCon.upper() != "Y":
         difCon = input("Confirm difficulty "+ plr["dif"]+"? "+ "[Y/N]: ")
 
     if difCon.upper() == "N":
-        difficultyselect()
+        difficulty_select()
         difCon = ""
 
 doTut = input("Would you like to play the tutorial? [Y/N]: ")
 while doTut.upper() != "Y" and doTut.upper() != "N":
     doTut = input("Would you like to play the tutorial? [Y/N]: ")
+
+enemyTemplates = {
+
+    "low" : {
+        "titles" : ["Goblin", "Green Slime", "Skeleton", "Rotten Zombie", "Wolf"],
+        "atk": 1,
+        "def": 1,
+        "hp": 6,
+    },
+
+    "mid" : {
+        "titles" : ["Orc", "Blue Slime", "Armored Skeleton", "Zombie", "Wolf Pack Leader"],
+        "atk": 3,
+        "def": 3,
+        "hp": 12,
+    },
+
+    "high": {
+        "titles" : ["Orc General", "Red Slime", "Skeleton Warrior", "Mutated Zombie", "Giant"],
+        "atk": 5,
+        "def": 5,
+        "hp": 25,
+    },
+
+    "miniboss": {
+        "titles" : ["Fenrir", "Giant Black Slime", "Ancient Giant"],
+        "atk": 7,
+        "def": 7,
+        "hp": 35,
+    },
+
+    "final_boss": {
+        "title" : ["Dark Lord"],
+        "atk": 10,
+        "def": 10,
+        "hp": 35,
+    },
+}
+
+def battle(enemy):
+    print(plr["name"], "VS.", enemy)
