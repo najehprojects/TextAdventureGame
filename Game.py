@@ -121,7 +121,7 @@ enemyTemplates = {
     },
 
     "final_boss": {
-        "title" : ["Dark Lord"],
+        "title" : ["The Dark Lord"],
         "atk": 10,
         "def": 10,
         "hp": 35,
