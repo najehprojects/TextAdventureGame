@@ -14,9 +14,9 @@ plr = {
 
     "level" : 1,
     "xp" : 0,
-    "atk" : 1,
+    "atk" : 4,
     "def" : 1,
-    "hp" : 10,
+    "hp" : 20,
 
     "scene": "Intro",
     "moves" : 50,
@@ -24,6 +24,9 @@ plr = {
 
     "dif" : ""
 }
+
+def gameover():
+    print("Game Over")
 
 def showstats():
     print()
@@ -92,6 +95,13 @@ while doTut.upper() != "Y" and doTut.upper() != "N":
 
 enemyTemplates = {
 
+    "tutorial" : {
+        "titles" : "Dummy",
+        "atk" : 1,
+        "def" : 0,
+        "hp" : 999,
+    },
+
     "low" : {
         "titles" : ["Goblin", "Green Slime", "Skeleton", "Rotten Zombie", "Wolf"],
         "atk": 1,
@@ -129,4 +139,69 @@ enemyTemplates = {
 }
 
 def battle(enemy):
-    print(plr["name"], "VS.", enemy)
+
+    print(plr["name"], "VS.", enemy+"!")
+
+    currentenemy = enemyTemplates[enemy.lower()]
+
+    while plr["hp"] > 0 and currentenemy["hp"] > 0:
+
+        def action():
+            nextaction = input("Choose your action [ATK - 1 / DEF - 2 / RUN - 3]: ")
+            while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "RUN" and nextaction != "1" and nextaction != "2" and nextaction != "3":
+                nextaction = input("Choose your action [ATK - 1 / DEF - 2 / RUN - 3]: ")
+            return nextaction
+
+        def attack(target, damage):
+
+            chance = random.randint(1,20)
+
+            if chance <= 2:
+                damage = damage*(random.randint(2,3))
+                print("Critical attack!")
+
+            if chance == 20:
+                damage = 0
+                print("Miss!")
+
+            if target == "plr":
+                plr["hp"] -= damage*(1-(plr["def"]/100))
+                print("You took", damage*(1-(plr["def"]/100)), "damage!")
+                print("You have", plr["hp"], "HP left!")
+                print()
+            if target == "enemy":
+                currentenemy["hp"] -= damage*(1-(currentenemy["def"]/100))
+                print("You dealt", damage*(1-(currentenemy["def"]/100)), "damage!")
+                print(currentenemy["titles"], "has", currentenemy["hp"], "HP left!")
+                print()
+
+        plrchoice = action()
+
+        if plrchoice == "ATK" or plrchoice == "1":
+            attack("enemy", plr["atk"])
+
+        if plr["hp"] <= 0:
+            gameover()
+        elif currentenemy["hp"] <= 0:
+
+            print("You win!")
+            xpgain = 0
+
+            if enemyTemplates[enemy.lower()] == "tutorial":
+                xpgain += 0
+            elif enemyTemplates[enemy.lower()] == "low":
+                xpgain += random.randint(5,15)
+            elif enemyTemplates[enemy.lower()] == "mid":
+                xpgain += random.randint(15, 25)
+            elif enemyTemplates[enemy.lower()] == "high":
+                xpgain += random.randint(25, 35)
+            elif enemyTemplates[enemy.lower()] == "miniboss":
+                xpgain += random.randint(40, 60)
+            elif enemyTemplates[enemy.lower()] == "finalboss":
+                xpgain += 999
+
+            print("You gained:", xpgain, "XP!")
+            break
+
+if doTut.upper() == "Y":
+    battle("Tutorial")

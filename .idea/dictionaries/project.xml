@@ -2,8 +2,15 @@
   <dictionary name="project">
     <words>
       <w>animatetxt</w>
+      <w>critchance</w>
+      <w>currentenemy</w>
       <w>difficultyselect</w>
+      <w>finalboss</w>
+      <w>gameover</w>
+      <w>nextaction</w>
+      <w>plrchoice</w>
       <w>showinv</w>
+      <w>xpgain</w>
     </words>
   </dictionary>
 </component>
