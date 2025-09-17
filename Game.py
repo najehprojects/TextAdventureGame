@@ -3,9 +3,7 @@ import sys
 import time
 import random
 import os
-
-from fontTools.subset.svg import xpath
-from fontTools.t1Lib import std_subrs
+from traceback import print_tb
 
 
 def wait(secs):
@@ -17,11 +15,12 @@ plr = {
 
     "inventory": [""],
 
-    "level" : 67,
-    "xp" : 29480,
+    "level" : 66,
+    "xp" : 28710,
     "atk" : 15,
     "def" : 10,
     "hp" : 100,
+    "title" : " the Hero",
 
 
     "scene": "Intro",
@@ -31,24 +30,18 @@ plr = {
     "dif" : ""
 }
 
-theoryxp= 0
-
-for i in range(1,68):
-    theoryxp += 100+(10*i)
-
-print(theoryxp)
-
 critChance = 12
 missChance = 5
 
 def gameover():
     print("Game Over")
+    exit(0)
 
 def showstats():
     print()
     print("-<{[PLAYER STATS]}>-")
     print()
-    print("["+str.upper(plr["name"])+"]")
+    print("["+str.upper(plr["name"])+str.upper(plr["title"])+"]")
     print("Current Weapon:", plr["weapon"])
     print("Level:", plr["level"])
     print("XP:", plr["xp"])
@@ -70,6 +63,24 @@ plr["name"] = input()
 
 while plr["name"] == "":
     plr["name"] = input("Enter a valid name: ")
+
+if plr["name"] == "Zeri":
+    plr["hp"] = 99999999999999
+    plr["atk"] = 99999999999999
+    plr["def"] = 99
+    plr["level"] = 999
+    plr["xp"] = 99999999999999
+    plr["weapon"] = "Strong ahh stick"
+
+elif plr["name"] == "Gooner":
+    animatetxt("So you've chosen this path...", 0.9)
+    plr["hp"] = 10
+    plr["atk"] = 50
+    plr["def"] = 50
+    plr["title"] = ", the Forsaken One"
+    plr["level"] = 999
+    plr["weapon"] = "..."
+    wait(3)
 
 showstats()
 
@@ -112,11 +123,12 @@ while doTut.upper() != "Y" and doTut.upper() != "N":
 enemyTemplates = {
 
     "tutorial" : {
-        "titles" : "Dummy",
+        "titles" : ["Dummy"],
         "atk" : 1,
-        "def" : 0,
-        "hp" : 20,
+        "def" : 5,
+        "hp" : 100,
         "xp" : "tutorial",
+        "name" : "",
     },
 
     "low" : {
@@ -125,50 +137,57 @@ enemyTemplates = {
         "def": 1,
         "hp": 6,
         "xp" : "low",
+        "name" : "",
     },
 
     "mid" : {
         "titles" : ["Orc", "Blue Slime", "Armored Skeleton", "Zombie", "Wolf Pack Leader"],
-        "atk": 3,
-        "def": 3,
-        "hp": 12,
+        "atk": 7,
+        "def": 5,
+        "hp": 41,
         "xp" : "mid",
+        "name" : "",
     },
 
     "high": {
         "titles" : ["Orc General", "Red Slime", "Skeleton Warrior", "Mutated Zombie", "Giant"],
-        "atk": 5,
-        "def": 5,
-        "hp": 25,
+        "atk": 15,
+        "def": 7,
+        "hp": 85,
         "xp" : "high",
+        "name" : "",
     },
 
     "miniboss": {
         "titles" : ["Fenrir", "Giant Black Slime", "Ancient Giant"],
-        "atk": 7,
-        "def": 7,
-        "hp": 35,
+        "atk": 24,
+        "def": 12,
+        "hp": 150,
         "xp" : "miniboss",
+        "name" : "",
     },
 
-    "final_boss": {
-        "title" : ["The Dark Lord"],
-        "atk": 10,
-        "def": 10,
-        "hp": 35,
+    "finalboss": {
+        "titles" : ["The Dark Lord"],
+        "atk": 50,
+        "def": 25,
+        "hp": 350,
         "xp" : "finalboss",
+        "name" : "",
     },
 }
 
 def battle(enemy):
 
-    print(plr["name"], "VS.", enemy+"!")
-
     currentenemy = enemyTemplates[enemy.lower()]
+    currentenemy["name"] = enemyTemplates[enemy.lower()]["titles"][(random.randint(1, len(enemyTemplates[enemy.lower()]["titles"]))) - 1]
+
+    print(plr["name"], "VS.", currentenemy["name"] + "!")
 
     while plr["hp"] > 0 and currentenemy["hp"] > 0:
 
         def action():
+            wait(1)
             nextaction = input("Choose your action [ATK - 1 / DEF - 2 / RUN - 3]: ")
             while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "RUN" and nextaction != "1" and nextaction != "2" and nextaction != "3":
                 nextaction = input("Choose your action [ATK - 1 / DEF - 2 / RUN - 3]: ")
@@ -182,18 +201,20 @@ def battle(enemy):
                 damage = damage*(random.randint(2,3))
                 print("Critical attack!")
 
-            if chance == (100-missChance):
+            if chance >= (100-missChance):
                 damage = 0
                 print("Miss!")
 
             if target == "plr":
                 plr["hp"] -= math.ceil(damage*(1-(plr["def"]/100)))
                 print("You took", math.ceil(damage*(1-(plr["def"]/100))), "damage!")
+                if plr["hp"] < 0: plr["hp"] = 0
                 print("You have", plr["hp"], "HP left!")
             if target == "enemy":
                 currentenemy["hp"] -= math.ceil(damage*(1-(currentenemy["def"]/100)))
                 print("You dealt", math.ceil(damage*(1-(currentenemy["def"]/100))), "damage!")
-                print(currentenemy["titles"], "has", currentenemy["hp"], "HP left!")
+                if currentenemy["hp"] < 0: currentenemy["hp"] = 0
+                print(currentenemy["name"], "has", currentenemy["hp"], "HP left!")
                 print()
 
         def changestat(target, stat, changing, amount):
@@ -209,8 +230,6 @@ def battle(enemy):
                 else:
                     plr[stat] += amount
 
-
-
         plrchoice = action()
 
         cpuchoice = random.randint(1, 2)
@@ -219,13 +238,31 @@ def battle(enemy):
             if cpuchoice == 1:
                 attack("enemy", plr["atk"])
             else:
-                attack("enemy", (plr["atk"] - currentenemy["def"]))
-                print(currentenemy["titles"], " defended! DMG DOWN")
+                if math.ceil(plr["atk"] - currentenemy["def"]) >= 0:
+                    attack("enemy", math.ceil(plr["atk"] - currentenemy["def"]))
+                    print(currentenemy["name"], "defended! DMG DOWN")
+                    print()
+                else:
+                    attack("enemy", 1)
+                    print(currentenemy["name"], "defended! DMG DOWN")
+                    print()
 
         if cpuchoice == 1:
-            attack("plr", currentenemy["atk"])
-        else:
-            changestat("enemy", "def", "percent", 200)
+            if plrchoice == "ATK" or plrchoice == "1":
+                attack("plr", currentenemy["atk"])
+            else:
+                if math.ceil(currentenemy["atk"] - plr["def"]) >= 0:
+                    print("You defended! DMG TAKEN DOWN")
+                    attack("plr", math.ceil(currentenemy["atk"] - plr["def"]))
+                    print()
+                else:
+                    print("You defended! DMG TAKEN DOWN")
+                    attack("plr", 1)
+                    print()
+
+        if plrchoice == "2" and cpuchoice == 2 or plrchoice == "DEF" and cpuchoice == 2:
+            print("Both Parties Defended! No Damage was taken!")
+            print()
 
         if plr["hp"] <= 0:
             gameover()
@@ -255,21 +292,30 @@ def battle(enemy):
             level = 0
             totalxp = (plr["xp"]+xpgain)
 
-            while True:
-                if totalxp - (100+(10*level)) >= 0:
-                    totalxp -= (100+(10*level))
-                    level += 1
-                else:
-                    print("XP till next level:",totalxp)
-                    break
+            if oldlevel < 999:
+                while True:
+                    if totalxp - (100+(10*level)) >= 0:
+                        totalxp -= (100+(10*level))
+                        level += 1
+                    else:
+                        print("XP till next level:",totalxp)
+                        break
 
-            if level > oldlevel:
-                print("LEVEL UP!")
-                print("<"+str(oldlevel)+">", "-->", "<"+str(level)+">")
+                if level > oldlevel:
+                    print("LEVEL UP!")
+                    print("<"+str(oldlevel)+">", "-->", "<"+str(level)+">")
+                break
             else:
-                print(oldlevel)
-                print(level)
-            break
+                print("Level MAX!")
+
+            showstats()
 
 if doTut.upper() == "Y":
     battle("Tutorial")
+
+battle("Low")
+battle("Mid")
+battle("High")
+battle("Miniboss")
+battle("Low")
+battle("Finalboss")
