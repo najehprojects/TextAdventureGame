@@ -55,7 +55,7 @@ def animatetxt(msg, spd):
 
     print()
 
-print("Welcome to [Game Title]!")
+animatetxt("Welcome to [Game Title]!",1)
 input("Press enter to continue...")
 
 print("First, please enter a name")
@@ -72,7 +72,7 @@ if plr["name"] == "Zeri":
     plr["xp"] = 99999999999999
     plr["weapon"] = "Strong ahh stick"
 
-elif plr["name"] == "Gooner":
+elif plr["name"] == "Hero":
     animatetxt("So you've chosen this path...", 0.9)
     plr["hp"] = 10
     plr["atk"] = 50
@@ -83,6 +83,8 @@ elif plr["name"] == "Gooner":
     wait(3)
 
 showstats()
+
+wait(1)
 
 def difficulty_select():
 
@@ -123,7 +125,7 @@ while doTut.upper() != "Y" and doTut.upper() != "N":
 enemyTemplates = {
 
     "tutorial" : {
-        "titles" : ["Dummy"],
+        "titles" : ["Training Dummy"],
         "atk" : 1,
         "def" : 5,
         "hp" : 100,
@@ -188,9 +190,9 @@ def battle(enemy):
 
         def action():
             wait(1)
-            nextaction = input("Choose your action [ATK - 1 / DEF - 2 / RUN - 3]: ")
+            nextaction = input("Choose your action [ATK - 1 / DEF - 2]") # / DEF - 3 / ITEM - 4 / RUN - 5 / ]: ")
             while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "RUN" and nextaction != "1" and nextaction != "2" and nextaction != "3":
-                nextaction = input("Choose your action [ATK - 1 / DEF - 2 / RUN - 3]: ")
+                nextaction = input("Choose your action [ATK - 1 / DEF - 2]") # / DEF - 3 / ITEM - 4 / RUN - 5 / ]: ")
             return nextaction
 
         def attack(target, damage):
@@ -304,11 +306,13 @@ def battle(enemy):
                 if level > oldlevel:
                     print("LEVEL UP!")
                     print("<"+str(oldlevel)+">", "-->", "<"+str(level)+">")
+                    print()
+                    showstats()
                 break
             else:
                 print("Level MAX!")
 
-            showstats()
+print("Battle System Tests")
 
 if doTut.upper() == "Y":
     battle("Tutorial")
