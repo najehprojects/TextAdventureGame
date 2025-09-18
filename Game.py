@@ -55,7 +55,7 @@ def animatetxt(msg, spd):
 
     print()
 
-animatetxt("Welcome to [Game Title]!",1)
+animatetxt("Welcome to [Game Title]!",1.5)
 input("Press enter to continue...")
 
 print("First, please enter a name")
@@ -74,12 +74,12 @@ if plr["name"] == "Zeri":
 
 elif plr["name"] == "Hero":
     animatetxt("So you've chosen this path...", 0.9)
-    plr["hp"] = 10
-    plr["atk"] = 50
-    plr["def"] = 50
-    plr["title"] = ", the Forsaken One"
+    plr["hp"] = 5
+    plr["atk"] = 999
+    plr["def"] = 99
+    plr["title"] = ", the True Saviour"
     plr["level"] = 999
-    plr["weapon"] = "..."
+    plr["weapon"] = "The Legendary Blade, Excalibur"
     wait(3)
 
 showstats()
@@ -179,12 +179,19 @@ enemyTemplates = {
     },
 }
 
+tutorialComplete = False
+
 def battle(enemy):
 
     currentenemy = enemyTemplates[enemy.lower()]
     currentenemy["name"] = enemyTemplates[enemy.lower()]["titles"][(random.randint(1, len(enemyTemplates[enemy.lower()]["titles"]))) - 1]
 
     print(plr["name"], "VS.", currentenemy["name"] + "!")
+
+    if enemy.lower() == "tutorial":
+        while not tutorialComplete:
+            print("Welcome to the Tutorial!")
+            break
 
     while plr["hp"] > 0 and currentenemy["hp"] > 0:
 
@@ -212,6 +219,7 @@ def battle(enemy):
                 print("You took", math.ceil(damage*(1-(plr["def"]/100))), "damage!")
                 if plr["hp"] < 0: plr["hp"] = 0
                 print("You have", plr["hp"], "HP left!")
+                print()
             if target == "enemy":
                 currentenemy["hp"] -= math.ceil(damage*(1-(currentenemy["def"]/100)))
                 print("You dealt", math.ceil(damage*(1-(currentenemy["def"]/100))), "damage!")
@@ -239,27 +247,35 @@ def battle(enemy):
         if plrchoice == "ATK" or plrchoice == "1":
             if cpuchoice == 1:
                 attack("enemy", plr["atk"])
+                wait(1)
+                print()
             else:
                 if math.ceil(plr["atk"] - currentenemy["def"]) >= 0:
                     attack("enemy", math.ceil(plr["atk"] - currentenemy["def"]))
                     print(currentenemy["name"], "defended! DMG DOWN")
+                    wait(1)
                     print()
                 else:
                     attack("enemy", 1)
                     print(currentenemy["name"], "defended! DMG DOWN")
+                    wait(1)
                     print()
 
         if cpuchoice == 1:
             if plrchoice == "ATK" or plrchoice == "1":
                 attack("plr", currentenemy["atk"])
+                wait(1)
+                print()
             else:
                 if math.ceil(currentenemy["atk"] - plr["def"]) >= 0:
                     print("You defended! DMG TAKEN DOWN")
                     attack("plr", math.ceil(currentenemy["atk"] - plr["def"]))
+                    wait(1)
                     print()
                 else:
                     print("You defended! DMG TAKEN DOWN")
                     attack("plr", 1)
+                    wait(1)
                     print()
 
         if plrchoice == "2" and cpuchoice == 2 or plrchoice == "DEF" and cpuchoice == 2:
@@ -315,7 +331,8 @@ def battle(enemy):
 print("Battle System Tests")
 
 if doTut.upper() == "Y":
-    battle("Tutorial")
+    print("Proper Tutorial not yet implemented")
+    #battle("Tutorial")
 
 battle("Low")
 battle("Mid")
