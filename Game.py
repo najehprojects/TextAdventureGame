@@ -3,11 +3,107 @@ import sys
 import time
 import random
 import os
+import copy
+from tkinter.font import names
 from traceback import print_tb
 
 
 def wait(secs):
    time.sleep(secs)
+
+skillShop = {
+
+    "spcost" : 3,
+
+    "skills" : {
+
+        [1] : {
+            "name": "Low Heal",
+            "manacost": 45,
+
+            "healamount": 10,
+        },
+
+        [2] : {
+            "name": "Slow",
+            "manacost": 35,
+
+            "debufftype" : "atk",
+            "debuffamount": 5,
+            "debuffduration" : 2,
+        },
+
+        [3] : {
+            "name": "Slice",
+            "manacost": 40,
+
+            "damage" : 25,
+        },
+
+    },
+
+    "spcost": 5,
+
+    "skills": {
+
+        [4] : {
+            "name" : "Heal",
+            "manacost": 50,
+
+            "healpercentage": 25,
+        },
+
+        [5] : {
+            "name" : "Poison",
+            "manacost": 50,
+
+            "poisondamage": 5,
+            "debufftype": "def",
+            "debuffamount": 5,
+            "debuffduration" : 5,
+        },
+
+        [6] : {
+            "name" : "Slash",
+            "manacost": 50,
+
+            "damage" : 35,
+        },
+
+    },
+
+    "spcost": 10,
+
+    "skills": {
+
+        [7] : {
+            "name": "Master Heal",
+            "manacost": 75,
+
+            "healpercentage": 50,
+        },
+
+        [8] : {
+            "name": "Venom",
+            "manacost" : 65,
+
+            "damage" : 5,
+            "poisondamage" : 10,
+            "debufftype" : "def",
+            "debuffamount" : 10,
+            "debuffduration" : 4,
+        },
+
+        [9] : {
+            "name": "Execute",
+            "manacost": 75,
+
+            "damage" : 65,
+        },
+
+    },
+
+}
 
 plr = {
     "name" : "",
@@ -15,16 +111,24 @@ plr = {
 
     "inventory": [""],
 
+    "skils" : [""],
+
     "level" : 66,
     "xp" : 28710,
+
+    "skillpoints" : 3,
+
     "atk" : 15,
     "def" : 10,
     "hp" : 100,
+
+    "mana" : 100,
+
     "title" : " the Hero",
 
 
     "scene": "Intro",
-    "moves" : 50,
+    "moves" : 5,
     "pos": 0,
 
     "dif" : ""
@@ -55,7 +159,7 @@ def animatetxt(msg, spd):
 
     print()
 
-animatetxt("Welcome to [Game Title]!",1.5)
+animatetxt("Welcome to [Game Title]!",2)
 input("Press enter to continue...")
 
 print("First, please enter a name")
@@ -127,7 +231,7 @@ enemyTemplates = {
     "tutorial" : {
         "titles" : ["Training Dummy"],
         "atk" : 1,
-        "def" : 5,
+        "def" : 0,
         "hp" : 100,
         "xp" : "tutorial",
         "name" : "",
@@ -172,7 +276,7 @@ enemyTemplates = {
     "finalboss": {
         "titles" : ["The Dark Lord"],
         "atk": 50,
-        "def": 25,
+        "def": 50,
         "hp": 350,
         "xp" : "finalboss",
         "name" : "",
@@ -183,7 +287,7 @@ tutorialComplete = False
 
 def battle(enemy):
 
-    currentenemy = enemyTemplates[enemy.lower()]
+    currentenemy = copy.deepcopy(enemyTemplates[enemy.lower()])
     currentenemy["name"] = enemyTemplates[enemy.lower()]["titles"][(random.randint(1, len(enemyTemplates[enemy.lower()]["titles"]))) - 1]
 
     print(plr["name"], "VS.", currentenemy["name"] + "!")
@@ -197,12 +301,14 @@ def battle(enemy):
 
         def action():
             wait(1)
-            nextaction = input("Choose your action [ATK - 1 / DEF - 2]") # / DEF - 3 / ITEM - 4 / RUN - 5 / ]: ")
+            plr["mana"] += 10
+            print("Current Mana:", plr["mana"])
+            nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / ]: ")
             while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "RUN" and nextaction != "1" and nextaction != "2" and nextaction != "3":
-                nextaction = input("Choose your action [ATK - 1 / DEF - 2]") # / DEF - 3 / ITEM - 4 / RUN - 5 / ]: ")
+                nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / ]: ")
             return nextaction
 
-        def attack(target, damage):
+        def attack(target, damage, skill):
 
             chance = random.randint(1,100)
 
@@ -214,18 +320,21 @@ def battle(enemy):
                 damage = 0
                 print("Miss!")
 
-            if target == "plr":
-                plr["hp"] -= math.ceil(damage*(1-(plr["def"]/100)))
-                print("You took", math.ceil(damage*(1-(plr["def"]/100))), "damage!")
-                if plr["hp"] < 0: plr["hp"] = 0
-                print("You have", plr["hp"], "HP left!")
-                print()
-            if target == "enemy":
-                currentenemy["hp"] -= math.ceil(damage*(1-(currentenemy["def"]/100)))
-                print("You dealt", math.ceil(damage*(1-(currentenemy["def"]/100))), "damage!")
-                if currentenemy["hp"] < 0: currentenemy["hp"] = 0
-                print(currentenemy["name"], "has", currentenemy["hp"], "HP left!")
-                print()
+            if skill == "Basic":
+                if target == "plr":
+                    plr["hp"] -= math.ceil(damage*(1-(plr["def"]/100)))
+                    print("You took", math.ceil(damage*(1-(plr["def"]/100))), "damage!")
+                    if plr["hp"] < 0: plr["hp"] = 0
+                    print("You have", plr["hp"], "HP left!")
+                    print()
+                if target == "enemy":
+                    currentenemy["hp"] -= math.ceil(damage*(1-(currentenemy["def"]/100)))
+                    print("You dealt", math.ceil(damage*(1-(currentenemy["def"]/100))), "damage!")
+                    if currentenemy["hp"] < 0: currentenemy["hp"] = 0
+                    print(currentenemy["name"], "has", currentenemy["hp"], "HP left!")
+                    print()
+            if skill == "Tutorial":
+
 
         def changestat(target, stat, changing, amount):
 
@@ -249,7 +358,7 @@ def battle(enemy):
                 attack("enemy", plr["atk"])
                 wait(1)
                 print()
-            else:
+            if cpuchoice == 2:
                 if math.ceil(plr["atk"] - currentenemy["def"]) >= 0:
                     attack("enemy", math.ceil(plr["atk"] - currentenemy["def"]))
                     print(currentenemy["name"], "defended! DMG DOWN")
@@ -261,25 +370,26 @@ def battle(enemy):
                     wait(1)
                     print()
 
-        if cpuchoice == 1:
-            if plrchoice == "ATK" or plrchoice == "1":
-                attack("plr", currentenemy["atk"])
-                wait(1)
-                print()
-            else:
-                if math.ceil(currentenemy["atk"] - plr["def"]) >= 0:
-                    print("You defended! DMG TAKEN DOWN")
-                    attack("plr", math.ceil(currentenemy["atk"] - plr["def"]))
+        if currentenemy["hp"] >= 1:
+            if cpuchoice == 1:
+                if plrchoice == "ATK" or plrchoice == "1":
+                    attack("plr", currentenemy["atk"])
                     wait(1)
                     print()
-                else:
-                    print("You defended! DMG TAKEN DOWN")
-                    attack("plr", 1)
-                    wait(1)
-                    print()
+                if plrchoice == "DEF" or plrchoice == "2":
+                    if math.ceil(currentenemy["atk"] - plr["def"]) >= 0:
+                        print("You defended! DMG TAKEN DOWN")
+                        attack("plr", math.ceil(currentenemy["atk"] - plr["def"]))
+                        wait(1)
+                        print()
+                    else:
+                        print("You defended! DMG TAKEN DOWN")
+                        attack("plr", 1)
+                        wait(1)
+                        print()
 
         if plrchoice == "2" and cpuchoice == 2 or plrchoice == "DEF" and cpuchoice == 2:
-            print("Both Parties Defended! No Damage was taken!")
+            print("Both Parties Defended! No Damage was taken or dealt!")
             print()
 
         if plr["hp"] <= 0:
@@ -287,6 +397,7 @@ def battle(enemy):
         elif currentenemy["hp"] <= 0:
 
             print("You win!")
+            plr["mana"] = 100
             xpgain = 0
 
             if currentenemy["xp"].lower() == "tutorial":
@@ -310,6 +421,8 @@ def battle(enemy):
             level = 0
             totalxp = (plr["xp"]+xpgain)
 
+            wait(2)
+
             if oldlevel < 999:
                 while True:
                     if totalxp - (100+(10*level)) >= 0:
@@ -328,6 +441,8 @@ def battle(enemy):
             else:
                 print("Level MAX!")
 
+            print()
+
 print("Battle System Tests")
 
 if doTut.upper() == "Y":
@@ -335,8 +450,13 @@ if doTut.upper() == "Y":
     #battle("Tutorial")
 
 battle("Low")
+wait(5)
 battle("Mid")
+wait(5)
 battle("High")
+wait(5)
 battle("Miniboss")
+wait(5)
 battle("Low")
+wait(5)
 battle("Finalboss")
