@@ -154,7 +154,21 @@ def animatetxt(msg, spd):
 
     print()
 
-animatetxt("Welcome to [Game Title]!",2)
+animatetxt("Welcome to...",1)
+print()
+animatetxt(""" .d8888b.  888                                                  8888888     888 d8b          888         888    888                          888 
+d88P  Y88b 888                                                    888       888 Y8P          888         888    888                          888 
+888    888 888                                                    888       888              888         888    888                          888 
+888        88888b.   .d88b.   .d88b.  .d8888b   .d88b.            888   .d88888 888  .d88b.  888888      8888888888  .d88b.  888d888 .d88b.  888 
+888        888 "88b d88""88b d88""88b 88K      d8P  Y8b           888  d88" 888 888 d88""88b 888         888    888 d8P  Y8b 888P"  d88""88b 888 
+888    888 888  888 888  888 888  888 "Y8888b. 88888888           888  888  888 888 888  888 888         888    888 88888888 888    888  888 Y8P 
+Y88b  d88P 888  888 Y88..88P Y88..88P      X88 Y8b.    d8b        888  Y88b 888 888 Y88..88P Y88b.       888    888 Y8b.     888    Y88..88P  "  
+ "Y8888P"  888  888  "Y88P"   "Y88P"   88888P'  "Y8888 88P      8888888 "Y88888 888  "Y88P"   "Y888      888    888  "Y8888  888     "Y88P"  888 
+                                                       8P                                                                                        
+                                                       "                                                                                         
+                                                                                                                                                 """, 100)
+wait(1)
+
 input("Press enter to continue...")
 
 print("First, please enter a name")
@@ -296,7 +310,7 @@ def battle(enemy):
 
         def action():
             wait(1)
-            plr["mana"] += 10
+            if (plr["mana"] + 10) <= 100: plr["mana"] += 10
             print("Current Mana:", plr["mana"])
             nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / ]: ")
             while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "RUN" and nextaction != "1" and nextaction != "2" and nextaction != "3":
