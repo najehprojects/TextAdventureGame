@@ -2,10 +2,7 @@ import math
 import sys
 import time
 import random
-import os
 import copy
-from tkinter.font import names
-from traceback import print_tb
 
 
 def wait(secs):
@@ -13,18 +10,18 @@ def wait(secs):
 
 skillShop = {
 
-    "spcost" : 3,
-
     "skills" : {
 
-        [1] : {
+        1 : {
+            "spcost" : 3,
             "name": "Low Heal",
             "manacost": 45,
 
             "healamount": 10,
         },
 
-        [2] : {
+        2 : {
+            "spcost" : 3,
             "name": "Slow",
             "manacost": 35,
 
@@ -33,27 +30,24 @@ skillShop = {
             "debuffduration" : 2,
         },
 
-        [3] : {
+        3 : {
+            "spcost" : 3,
             "name": "Slice",
             "manacost": 40,
 
             "damage" : 25,
         },
 
-    },
-
-    "spcost": 5,
-
-    "skills": {
-
-        [4] : {
+        4 : {
+            "spcost": 5,
             "name" : "Heal",
             "manacost": 50,
 
             "healpercentage": 25,
         },
 
-        [5] : {
+        5 : {
+            "spcost": 5,
             "name" : "Poison",
             "manacost": 50,
 
@@ -63,27 +57,26 @@ skillShop = {
             "debuffduration" : 5,
         },
 
-        [6] : {
+        6 : {
+            "spcost": 5,
             "name" : "Slash",
             "manacost": 50,
 
             "damage" : 35,
         },
 
-    },
+        7 : {
+            "spcost": 10,
 
-    "spcost": 10,
-
-    "skills": {
-
-        [7] : {
             "name": "Master Heal",
             "manacost": 75,
 
             "healpercentage": 50,
         },
 
-        [8] : {
+        8 : {
+            "spcost": 10,
+
             "name": "Venom",
             "manacost" : 65,
 
@@ -94,7 +87,9 @@ skillShop = {
             "debuffduration" : 4,
         },
 
-        [9] : {
+        9 : {
+            "spcost": 10,
+
             "name": "Execute",
             "manacost": 75,
 
@@ -320,7 +315,7 @@ def battle(enemy):
                 damage = 0
                 print("Miss!")
 
-            if skill == "Basic":
+            if skill == 0:
                 if target == "plr":
                     plr["hp"] -= math.ceil(damage*(1-(plr["def"]/100)))
                     print("You took", math.ceil(damage*(1-(plr["def"]/100))), "damage!")
@@ -333,21 +328,14 @@ def battle(enemy):
                     if currentenemy["hp"] < 0: currentenemy["hp"] = 0
                     print(currentenemy["name"], "has", currentenemy["hp"], "HP left!")
                     print()
-            if skill == "Tutorial":
+            if skill == 1:
+                print("a")
 
 
-        def changestat(target, stat, changing, amount):
+        def changestat(target, stat, amount):
 
-            if target == "enemy":
-                if changing == "percent":
-                    currentenemy[stat] = currentenemy[stat] * (amount/100)
-                else:
-                    currentenemy[stat] += amount
-            elif target == "plr":
-                if changing == "percent":
-                    plr[stat] = plr[stat] * (amount/100)
-                else:
-                    plr[stat] += amount
+           if target == "plr":
+                plr[stat] += amount
 
         plrchoice = action()
 
@@ -355,17 +343,17 @@ def battle(enemy):
 
         if plrchoice == "ATK" or plrchoice == "1":
             if cpuchoice == 1:
-                attack("enemy", plr["atk"])
+                attack("enemy", plr["atk"], 0)
                 wait(1)
                 print()
             if cpuchoice == 2:
                 if math.ceil(plr["atk"] - currentenemy["def"]) >= 0:
-                    attack("enemy", math.ceil(plr["atk"] - currentenemy["def"]))
+                    attack("enemy", math.ceil(plr["atk"] - currentenemy["def"]), 0)
                     print(currentenemy["name"], "defended! DMG DOWN")
                     wait(1)
                     print()
                 else:
-                    attack("enemy", 1)
+                    attack("enemy", 1,0)
                     print(currentenemy["name"], "defended! DMG DOWN")
                     wait(1)
                     print()
@@ -373,18 +361,18 @@ def battle(enemy):
         if currentenemy["hp"] >= 1:
             if cpuchoice == 1:
                 if plrchoice == "ATK" or plrchoice == "1":
-                    attack("plr", currentenemy["atk"])
+                    attack("plr", currentenemy["atk"], 0)
                     wait(1)
                     print()
                 if plrchoice == "DEF" or plrchoice == "2":
                     if math.ceil(currentenemy["atk"] - plr["def"]) >= 0:
                         print("You defended! DMG TAKEN DOWN")
-                        attack("plr", math.ceil(currentenemy["atk"] - plr["def"]))
+                        attack("plr", math.ceil(currentenemy["atk"] - plr["def"]), 0)
                         wait(1)
                         print()
                     else:
                         print("You defended! DMG TAKEN DOWN")
-                        attack("plr", 1)
+                        attack("plr", 1, 0)
                         wait(1)
                         print()
 
