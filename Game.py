@@ -4,7 +4,6 @@ import time
 import random
 import copy
 
-
 def wait(secs):
    time.sleep(secs)
 
@@ -244,6 +243,7 @@ enemyTemplates = {
         "hp" : 100,
         "xp" : "tutorial",
         "name" : "",
+        "battletext" : [""],
     },
 
     "low" : {
@@ -253,6 +253,7 @@ enemyTemplates = {
         "hp": 6,
         "xp" : "low",
         "name" : "",
+        "battletext" : [""],
     },
 
     "mid" : {
@@ -262,6 +263,7 @@ enemyTemplates = {
         "hp": 41,
         "xp" : "mid",
         "name" : "",
+        "battletext" : [""],
     },
 
     "high": {
@@ -271,6 +273,7 @@ enemyTemplates = {
         "hp": 85,
         "xp" : "high",
         "name" : "",
+        "battletext" : [""],
     },
 
     "miniboss": {
@@ -280,6 +283,7 @@ enemyTemplates = {
         "hp": 150,
         "xp" : "miniboss",
         "name" : "",
+        "battletext" : [""],
     },
 
     "finalboss": {
@@ -289,12 +293,17 @@ enemyTemplates = {
         "hp": 350,
         "xp" : "finalboss",
         "name" : "",
+        "battletext" : [""],
     },
 }
 
 tutorialComplete = False
 
 def battle(enemy):
+
+    turn = 0
+
+    print("Turn " + str(turn))
 
     currentenemy = copy.deepcopy(enemyTemplates[enemy.lower()])
     currentenemy["name"] = enemyTemplates[enemy.lower()]["titles"][(random.randint(1, len(enemyTemplates[enemy.lower()]["titles"]))) - 1]
@@ -312,9 +321,9 @@ def battle(enemy):
             wait(1)
             if (plr["mana"] + 10) <= 100: plr["mana"] += 10
             print("Current Mana:", plr["mana"])
-            nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / ]: ")
+            nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5]: ")
             while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "RUN" and nextaction != "1" and nextaction != "2" and nextaction != "3":
-                nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / ]: ")
+                nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5]: ")
             return nextaction
 
         def attack(target, damage, skill):
@@ -444,6 +453,8 @@ def battle(enemy):
                 print("Level MAX!")
 
             print()
+
+        turn += 1
 
 print("Battle System Tests")
 
