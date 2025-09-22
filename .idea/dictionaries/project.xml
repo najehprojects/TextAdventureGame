@@ -13,6 +13,7 @@
       <w>gameover</w>
       <w>healamount</w>
       <w>healpercentage</w>
+      <w>itemsstarted</w>
       <w>manacost</w>
       <w>nextaction</w>
       <w>plrchoice</w>
@@ -21,6 +22,7 @@
       <w>skillpoints</w>
       <w>skils</w>
       <w>spcost</w>
+      <w>waitorskip</w>
       <w>xpgain</w>
       <w>zeri</w>
     </words>
