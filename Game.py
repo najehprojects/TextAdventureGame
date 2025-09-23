@@ -10,7 +10,7 @@ def wait(secs):
    time.sleep(secs)
 
 def refresh():
-    sys.stdout.write("\033[2K")
+    sys.stdout.write("\033[2F")
     sys.stdout.flush()
 
 skillShop = {
@@ -121,9 +121,9 @@ plr = {
     "maxhp" : 100,
     "maxmana" : 100,
 
-    "atk" : 15,
+    "atk" : 20,
     "def" : 10,
-    "hp" : 100,
+    "hp" : 110,
 
     "mana" : 100,
 
@@ -136,112 +136,6 @@ plr = {
 
     "dif" : ""
 }
-
-critChance = 12
-missChance = 5
-
-def gameover():
-    print("Game Over")
-    exit(0)
-
-def showstats():
-    print()
-    print("-<{[PLAYER STATS]}>-")
-    print()
-    print("["+str.upper(plr["name"])+str.upper(plr["title"])+"]")
-    print("Current Weapon:", plr["weapon"])
-    print("Level:", plr["level"])
-    print("XP:", plr["xp"])
-    print()
-
-def animatetxt(msg, spd):
-    for chara in msg:
-        sys.stdout.write(chara)
-        sys.stdout.flush()
-        wait(0.25/spd)
-
-    print()
-
-animatetxt("Welcome to...",1)
-print()
-animatetxt(""" .d8888b.  888                                                  8888888     888 d8b          888         888    888                          888 
-d88P  Y88b 888                                                    888       888 Y8P          888         888    888                          888 
-888    888 888                                                    888       888              888         888    888                          888 
-888        88888b.   .d88b.   .d88b.  .d8888b   .d88b.            888   .d88888 888  .d88b.  888888      8888888888  .d88b.  888d888 .d88b.  888 
-888        888 "88b d88""88b d88""88b 88K      d8P  Y8b           888  d88" 888 888 d88""88b 888         888    888 d8P  Y8b 888P"  d88""88b 888 
-888    888 888  888 888  888 888  888 "Y8888b. 88888888           888  888  888 888 888  888 888         888    888 88888888 888    888  888 Y8P 
-Y88b  d88P 888  888 Y88..88P Y88..88P      X88 Y8b.    d8b        888  Y88b 888 888 Y88..88P Y88b.       888    888 Y8b.     888    Y88..88P  "  
- "Y8888P"  888  888  "Y88P"   "Y88P"   88888P'  "Y8888 88P      8888888 "Y88888 888  "Y88P"   "Y888      888    888  "Y8888  888     "Y88P"  888 
-                                                       8P                                                                                        
-                                                       "                                                                                         
-                                                                                                                                                 """, 100)
-wait(1)
-
-input("Press enter to continue...")
-
-print("First, please enter a name")
-plr["name"] = input()
-
-while plr["name"] == "":
-    plr["name"] = input("Enter a valid name: ")
-
-if plr["name"] == "Zeri":
-    plr["hp"] = 99999999999999
-    plr["atk"] = 99999999999999
-    plr["def"] = 99
-    plr["level"] = 999
-    plr["xp"] = 99999999999999
-    plr["weapon"] = "Strong ahh stick"
-
-elif plr["name"] == "Hero":
-    animatetxt("So you've chosen this path...", 0.9)
-    plr["hp"] = 5
-    plr["atk"] = 999
-    plr["def"] = 99
-    plr["title"] = ", the True Saviour"
-    plr["level"] = 999
-    plr["weapon"] = "The Legendary Blade, Excalibur"
-    wait(3)
-
-showstats()
-
-wait(1)
-
-def difficulty_select():
-
-    print("Choose Your Difficulty")
-    plr["dif"] = input("[Easy/Normal/Hard/Impossible] ")
-
-    while plr["dif"].upper() != "EASY" and plr["dif"].upper() != "NORMAL" and plr["dif"].upper() != "HARD" and plr["dif"].upper() != "IMPOSSIBLE" and plr["dif"].upper() != "E" and plr["dif"].upper() != "N" and plr["dif"].upper() != "H" and plr["dif"].upper() != "I":
-        plr["dif"] = input("Enter a valid difficulty: ")
-
-    if plr["dif"].upper() == "E":
-        plr["dif"] = "EASY"
-    if plr["dif"].upper() == "N":
-        plr["dif"] = "NORMAL"
-    if plr["dif"].upper() == "H":
-        plr["dif"] = "HARD"
-    if plr["dif"].upper() == "I":
-        plr["dif"] = "IMPOSSIBLE"
-
-    plr["dif"] = plr["dif"].upper()
-    print("Selected Difficulty "+ plr["dif"])
-
-difficulty_select()
-
-difCon = input("Are you sure you would like to proceed with difficulty "+ plr["dif"]+"? "+ "[Y/N]: ")
-while difCon.upper() != "Y":
-
-    while difCon.upper() != "Y" and difCon.upper() != "N":
-        difCon = input("Confirm difficulty "+ plr["dif"]+"? "+ "[Y/N]: ")
-
-    if difCon.upper() == "N":
-        difficulty_select()
-        difCon = ""
-
-doTut = input("Would you like to play the tutorial? [Y/N]: ")
-while doTut.upper() != "Y" and doTut.upper() != "N":
-    doTut = input("Would you like to play the tutorial? [Y/N]: ")
 
 enemyTemplates = {
 
@@ -306,6 +200,163 @@ enemyTemplates = {
     },
 }
 
+critChance = 12
+missChance = 5
+
+def gameover():
+    print("Game Over")
+    exit(0)
+
+def showstats():
+    print()
+    print("-<{[PLAYER STATS]}>-")
+    print()
+    print("["+str.upper(plr["name"])+str.upper(plr["title"])+"]")
+    print("Current Weapon:", plr["weapon"])
+    print("Level:", plr["level"])
+    print("XP:", plr["xp"])
+    print()
+
+def animatetxt(msg, spd):
+    for chara in msg:
+        sys.stdout.write(chara)
+        sys.stdout.flush()
+        wait(0.25/spd)
+
+    print()
+
+animatetxt("Welcome to...",1)
+print()
+animatetxt(""" .d8888b.  888                                                  8888888     888 d8b          888         888    888                          888 
+d88P  Y88b 888                                                    888       888 Y8P          888         888    888                          888 
+888    888 888                                                    888       888              888         888    888                          888 
+888        88888b.   .d88b.   .d88b.  .d8888b   .d88b.            888   .d88888 888  .d88b.  888888      8888888888  .d88b.  888d888 .d88b.  888 
+888        888 "88b d88""88b d88""88b 88K      d8P  Y8b           888  d88" 888 888 d88""88b 888         888    888 d8P  Y8b 888P"  d88""88b 888 
+888    888 888  888 888  888 888  888 "Y8888b. 88888888           888  888  888 888 888  888 888         888    888 88888888 888    888  888 Y8P 
+Y88b  d88P 888  888 Y88..88P Y88..88P      X88 Y8b.    d8b        888  Y88b 888 888 Y88..88P Y88b.       888    888 Y8b.     888    Y88..88P  "  
+ "Y8888P"  888  888  "Y88P"   "Y88P"   88888P'  "Y8888 88P      8888888 "Y88888 888  "Y88P"   "Y888      888    888  "Y8888  888     "Y88P"  888 
+                                                       8P                                                                                        
+                                                       "                                                                                         
+                                                                                                                                                 """, 100)
+wait(1)
+
+input("Press enter to continue...")
+
+print("First, please enter a name")
+plr["name"] = input()
+
+while plr["name"] == "":
+    plr["name"] = input("Enter a valid name: ")
+
+specialStory = False
+
+if plr["name"] == "Zeri":
+    plr["maxhp"] = 99999999999999
+    plr["hp"] = 99999999999999
+    plr["dif"] = "NORMAL"
+
+    plr["atk"] = 99999999999999
+    plr["def"] = 101
+    plr["level"] = 999
+    plr["xp"] = 99999999999999
+    plr["weapon"] = "Strong ahh stick"
+
+    specialStory = True
+
+elif plr["name"] == "Hero":
+    animatetxt("So you've chosen this path...", 0.9)
+    plr["hp"] = 2
+    plr["maxhp"] = 2
+    plr["atk"] = 701
+    plr["def"] = 99
+    plr["dif"] = "NORMAL"
+    plr["title"] = ", the True Saviour"
+    plr["level"] = 999
+    plr["xp"] = 99999999999999
+    plr["weapon"] = "The Legendary Blade, Excalibur"
+
+    enemyTemplates["finalboss"]["atk"] = 75
+
+    specialStory = True
+
+elif plr["name"] == "Clovii":
+    animatetxt("Goodluck... :)", 0.9)
+    plr["hp"] = 2
+    plr["maxhp"] = 2
+    plr["atk"] = 100
+    plr["def"] = 99
+    plr["dif"] = "NORMAL"
+    plr["title"] = ", the Bullied One"
+    plr["level"] = 0
+    plr["xp"] = 0
+    plr["nextxp"] = 100
+    plr["weapon"] = "A Branch"
+
+    enemyTemplates["finalboss"]["atk"] = 999
+    enemyTemplates["finalboss"]["def"] = 101
+    enemyTemplates["finalboss"]["hp"] = 999
+    enemyTemplates["finalboss"]["titles"] = ["Full Power Zeri"]
+
+    specialStory = True
+
+    wait(3)
+
+showstats()
+
+wait(1)
+
+def difficulty_select():
+
+    print("Choose Your Difficulty")
+    plr["dif"] = input("[Easy/Normal/Hard/Impossible] ")
+
+    while plr["dif"].upper() != "EASY" and plr["dif"].upper() != "NORMAL" and plr["dif"].upper() != "HARD" and plr["dif"].upper() != "IMPOSSIBLE" and plr["dif"].upper() != "E" and plr["dif"].upper() != "N" and plr["dif"].upper() != "H" and plr["dif"].upper() != "I":
+        plr["dif"] = input("Enter a valid difficulty: ")
+
+    if plr["dif"].upper() == "E":
+        plr["dif"] = "EASY"
+    if plr["dif"].upper() == "N":
+        plr["dif"] = "NORMAL"
+    if plr["dif"].upper() == "H":
+        plr["dif"] = "HARD"
+    if plr["dif"].upper() == "I":
+        plr["dif"] = "IMPOSSIBLE"
+
+    plr["dif"] = plr["dif"].upper()
+    print("Selected Difficulty "+ plr["dif"])
+
+if not specialStory:
+    difficulty_select()
+
+    difCon = input("Are you sure you would like to proceed with difficulty "+ plr["dif"]+"? "+ "[Y/N]: ")
+    while difCon.upper() != "Y":
+
+        while difCon.upper() != "Y" and difCon.upper() != "N":
+            difCon = input("Confirm difficulty "+ plr["dif"]+"? "+ "[Y/N]: ")
+
+        if difCon.upper() == "N":
+            difficulty_select()
+            difCon = ""
+
+    if plr["dif"] == "EASY":
+        plr["maxhp"] += 25
+        plr["hp"] += 25
+
+        plr["atk"] += 10
+        plr["def"] += 5
+
+    elif plr["dif"] == "HARD":
+        plr["maxhp"] -= 25
+        plr["hp"] -= 25
+
+    elif plr["dif"] == "IMPOSSIBLE":
+        plr["maxhp"] -= 25
+        plr["hp"] -= 25
+
+doTut = input("Would you like to play the tutorial? [Y/N]: ")
+while doTut.upper() != "Y" and doTut.upper() != "N":
+    doTut = input("Would you like to play the tutorial? [Y/N]: ")
+
 tutorialComplete = False
 
 def battle(enemy):
@@ -330,8 +381,8 @@ def battle(enemy):
             wait(1)
             refresh()
             if (plr["mana"] + 10) <= 100: plr["mana"] += 10
-            print("Current Mana:", plr["mana"]+"/"+plr["maxmana"])
-            print("Current HP:", plr["hp"]+"/"+plr["maxhp"])
+            print("Current Mana:", plr["mana"], "/", plr["maxmana"])
+            print("Current HP:", plr["hp"], "/", plr["maxhp"])
             nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5]: ")
             while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "RUN" and nextaction != "1" and nextaction != "2" and nextaction != "3":
                 nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5]: ")
@@ -438,25 +489,35 @@ def battle(enemy):
             print("You gained:", xpgain, "XP!")
             print()
 
+            plr["xp"] += xpgain
             oldlevel = plr["level"]
 
-            level = 0
-            totalxp = (plr["xp"]+xpgain)
+            temptotalxp = plr["xp"]
+            levelsup = 0
+
+            def levelandxp(totalxp, levels):
+                while temptotalxp >= 100+(10*levelsup):
+                    temptotalxp -= 100+(10*levelsup)
+                    levelsup += 1
+                return levelsup, temptotalxp
 
             wait(2)
 
             if oldlevel < 999:
-                while True:
-                    if totalxp - (100+(10*level)) >= 0:
-                        totalxp -= (100+(10*level))
-                        level += 1
-                    else:
-                        print("XP till next level:",totalxp)
-                        break
 
-                if level > oldlevel:
+                levelandxp()
+
+                if plr["level"] > oldlevel:
                     print("LEVEL UP!")
-                    print("<"+str(oldlevel)+">", "-->", "<"+str(level)+">")
+                    print("<"+str(oldlevel)+">", "-->", "<"+str(plr["level"])+">")
+
+                    plr["maxhp"] += 10
+                    plr["maxmana"] += 10
+                    plr["atk"] += 5
+                    plr["def"] += 1
+                    plr["skillpoints"] += 1
+                    plr["hp"] = plr["maxhp"]
+                    plr["mana"] = plr["maxmana"]
                     print()
                     showstats()
                 break
@@ -467,13 +528,11 @@ def battle(enemy):
 
         turn += 1
 
-print("Battle System Tests")
+#print("Battle System Tests")
 
 if doTut.upper() == "Y":
     print("Proper Tutorial not yet implemented")
     #battle("Tutorial")
-
-refresh()
 
 battle("Low")
 wait(3)
@@ -485,4 +544,19 @@ battle("Miniboss")
 wait(3)
 battle("Low")
 wait(3)
+
+if plr["name"] == "Clovii":
+    animatetxt("Wait a minute", 5)
+    animatetxt("You got a few more enemies to deal with!", 10)
+    wait(3)
+
+    while plr["level"] < 999:
+        newEn = random.randint(1,3)
+        if newEn == 1:
+            battle("Mid")
+        elif newEn == 2:
+            battle("High")
+        elif newEn == 3:
+            battle("Miniboss")
+
 battle("Finalboss")
