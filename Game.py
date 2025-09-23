@@ -3,9 +3,15 @@ import sys
 import time
 import random
 import copy
+from colorama import init
+init()
 
 def wait(secs):
    time.sleep(secs)
+
+def refresh():
+    sys.stdout.write("\033[2K")
+    sys.stdout.flush()
 
 skillShop = {
 
@@ -111,6 +117,9 @@ plr = {
     "xp" : 28710,
 
     "skillpoints" : 3,
+
+    "maxhp" : 100,
+    "maxmana" : 100,
 
     "atk" : 15,
     "def" : 10,
@@ -319,8 +328,10 @@ def battle(enemy):
 
         def action():
             wait(1)
+            refresh()
             if (plr["mana"] + 10) <= 100: plr["mana"] += 10
-            print("Current Mana:", plr["mana"])
+            print("Current Mana:", plr["mana"]+"/"+plr["maxmana"])
+            print("Current HP:", plr["hp"]+"/"+plr["maxhp"])
             nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5]: ")
             while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "RUN" and nextaction != "1" and nextaction != "2" and nextaction != "3":
                 nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5]: ")
@@ -461,6 +472,8 @@ print("Battle System Tests")
 if doTut.upper() == "Y":
     print("Proper Tutorial not yet implemented")
     #battle("Tutorial")
+
+refresh()
 
 battle("Low")
 wait(3)
