@@ -3,8 +3,6 @@ import sys
 import time
 import random
 import copy
-from colorama import init
-init()
 
 def wait(secs):
    time.sleep(secs)
@@ -23,6 +21,7 @@ skillShop = {
             "manacost": 45,
 
             "healamount": 10,
+            "obtained" : False,
         },
 
         2 : {
@@ -33,6 +32,7 @@ skillShop = {
             "debufftype" : "atk",
             "debuffamount": 5,
             "debuffduration" : 2,
+            "obtained" : False,
         },
 
         3 : {
@@ -41,6 +41,7 @@ skillShop = {
             "manacost": 40,
 
             "damage" : 25,
+            "obtained" : False,
         },
 
         4 : {
@@ -49,6 +50,7 @@ skillShop = {
             "manacost": 50,
 
             "healpercentage": 25,
+            "obtained" : False,
         },
 
         5 : {
@@ -60,6 +62,7 @@ skillShop = {
             "debufftype": "def",
             "debuffamount": 5,
             "debuffduration" : 5,
+            "obtained" : False,
         },
 
         6 : {
@@ -68,6 +71,7 @@ skillShop = {
             "manacost": 50,
 
             "damage" : 35,
+            "obtained" : False,
         },
 
         7 : {
@@ -77,6 +81,7 @@ skillShop = {
             "manacost": 75,
 
             "healpercentage": 50,
+            "obtained" : False,
         },
 
         8 : {
@@ -90,6 +95,7 @@ skillShop = {
             "debufftype" : "def",
             "debuffamount" : 10,
             "debuffduration" : 4,
+            "obtained" : False,
         },
 
         9 : {
@@ -99,6 +105,7 @@ skillShop = {
             "manacost": 75,
 
             "damage" : 65,
+            "obtained" : False,
         },
 
     },
@@ -111,7 +118,7 @@ plr = {
 
     "inventory": [""],
 
-    "skils" : [""],
+    "skills" : [""],
 
     "level" : 66,
     "xp" : 28710,
@@ -281,21 +288,29 @@ elif plr["name"] == "Hero":
 
 elif plr["name"] == "Clovii":
     animatetxt("Goodluck... :)", 0.9)
-    plr["hp"] = 2
-    plr["maxhp"] = 2
+    plr["hp"] = 5
+    plr["maxhp"] = 5
     plr["atk"] = 100
     plr["def"] = 99
     plr["dif"] = "NORMAL"
     plr["title"] = ", the Bullied One"
+    plr["level"] = 995
+    plr["xp"] = 5000000
+    plr["nextxp"] = 10000
+    plr["weapon"] = "A Branch"
+
+    enemyTemplates["finalboss"]["atk"] = 9999999
+    enemyTemplates["finalboss"]["def"] = 200
+    enemyTemplates["finalboss"]["hp"] = 999
+    enemyTemplates["finalboss"]["titles"] = ["Full Power Zeri"]
+
+    specialStory = True
+
+elif plr["name"] == "Test":
+    plr["dif"] = "NORMAL"
     plr["level"] = 0
     plr["xp"] = 0
     plr["nextxp"] = 100
-    plr["weapon"] = "A Branch"
-
-    enemyTemplates["finalboss"]["atk"] = 999
-    enemyTemplates["finalboss"]["def"] = 101
-    enemyTemplates["finalboss"]["hp"] = 999
-    enemyTemplates["finalboss"]["titles"] = ["Full Power Zeri"]
 
     specialStory = True
 
@@ -383,12 +398,12 @@ def battle(enemy):
             if (plr["mana"] + 10) <= 100: plr["mana"] += 10
             print("Current Mana:", plr["mana"], "/", plr["maxmana"])
             print("Current HP:", plr["hp"], "/", plr["maxhp"])
-            nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5]: ")
-            while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "RUN" and nextaction != "1" and nextaction != "2" and nextaction != "3":
-                nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5]: ")
+            nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
+            while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "SKILL" and nextaction.upper() != "ITEM" and nextaction.upper() != "RUN" and nextaction.upper() != "UPGRADE" and nextaction != "1" and nextaction != "2" and nextaction != "3" and nextaction != "4" and nextaction != "5" and nextaction != "6":
+                nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
             return nextaction
 
-        def attack(target, damage, skill):
+        def attack(target, damage, skilla):
 
             chance = random.randint(1,100)
 
@@ -400,7 +415,7 @@ def battle(enemy):
                 damage = 0
                 print("Miss!")
 
-            if skill == 0:
+            if skilla == 0:
                 if target == "plr":
                     plr["hp"] -= math.ceil(damage*(1-(plr["def"]/100)))
                     print("You took", math.ceil(damage*(1-(plr["def"]/100))), "damage!")
@@ -413,9 +428,8 @@ def battle(enemy):
                     if currentenemy["hp"] < 0: currentenemy["hp"] = 0
                     print(currentenemy["name"], "has", currentenemy["hp"], "HP left!")
                     print()
-            if skill == 1:
+            if skilla == 1:
                 print("a")
-
 
         def changestat(target, stat, amount):
 
@@ -442,6 +456,38 @@ def battle(enemy):
                     print(currentenemy["name"], "defended! DMG DOWN")
                     wait(1)
                     print()
+
+        elif plrchoice == "SKILL" or plrchoice == "3":
+            print()
+            print("Choose Your Skill")
+            for skill in plr["skills"]:
+                print(skill)
+
+        elif plrchoice == "UPGRADE" or plrchoice == "6":
+            print()
+            print("Choose Your Upgrade")
+            print("Skill Points:", plr["skillpoints"])
+            for i in skillShop["skills"]:
+                if skillShop["skills"][i]["obtained"] == False:
+                    print(str(i)+":","SKILL NAME:", "<"+skillShop["skills"][i]["name"]+">")
+                    print("SP COST:", skillShop["skills"][i]["spcost"])
+
+            chosenupgrade = input("Choose your Upgrade: ")
+
+            for _ in skillShop["skills"]:
+
+                if skillShop["skills"][_]["name"] == chosenupgrade and plr["skillpoints"] >= skillShop["skills"][_]["spcost"] and skillShop["skills"][_]["obtained"] == False:
+                    print("BOUGHT SKILL", skillShop["skills"][_]["name"])
+                    plr["skillpoints"] -= skillShop["skills"][_]["spcost"]
+                    plr["skills"].append(skillShop["skills"][_]["name"])
+                    skillShop["skills"][_]["obtained"] = True
+
+                else:
+                    while True:
+                        for _ in skillShop["skills"]:
+                            if skillShop["skills"][_]["name"] == chosenupgrade and plr["skillpoints"] >= skillShop["skills"][_]["spcost"] and skillShop["skills"][_]["obtained"] == False:
+                                break
+                        chosenupgrade = input("Invalid Option, Choose your Upgrade: ")
 
         if currentenemy["hp"] >= 1:
             if cpuchoice == 1:
@@ -492,30 +538,37 @@ def battle(enemy):
             plr["xp"] += xpgain
             oldlevel = plr["level"]
 
-            temptotalxp = plr["xp"]
-            levelsup = 0
-
             def levelandxp(totalxp, levels):
-                while temptotalxp >= 100+(10*levelsup):
-                    temptotalxp -= 100+(10*levelsup)
-                    levelsup += 1
-                return levelsup, temptotalxp
+                while totalxp >= 100+(10*levels):
+                    totalxp -= 100+(10*levels)
+                    levels += 1
+                    #print("Current Level:", levels, "XP Left:", totalxp)
+                plr["level"] = levels
+                return totalxp
 
             wait(2)
 
             if oldlevel < 999:
 
-                levelandxp()
+                plr["nextxp"] = (100+(10*plr["level"]) - levelandxp(plr["xp"], 0))
+
+                if plr["level"] == oldlevel:
+                    print(print("XP till next level:", plr["nextxp"]))
 
                 if plr["level"] > oldlevel:
                     print("LEVEL UP!")
                     print("<"+str(oldlevel)+">", "-->", "<"+str(plr["level"])+">")
 
-                    plr["maxhp"] += 10
-                    plr["maxmana"] += 10
-                    plr["atk"] += 5
-                    plr["def"] += 1
-                    plr["skillpoints"] += 1
+                    plr["maxhp"] += (10 * (plr["level"] - oldlevel))
+                    plr["maxmana"] += (10 * (plr["level"] - oldlevel))
+                    plr["atk"] += (5 * (plr["level"] - oldlevel))
+
+                    if plr["def"] + (plr["level"] - oldlevel) <= 99:
+                        plr["def"] += (plr["level"] - oldlevel)
+                    else:
+                        print("Defence MAXED!")
+
+                    plr["skillpoints"] += (plr["level"] - oldlevel)
                     plr["hp"] = plr["maxhp"]
                     plr["mana"] = plr["maxmana"]
                     print()
