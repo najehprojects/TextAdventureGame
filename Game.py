@@ -11,12 +11,60 @@ def refresh():
     sys.stdout.write("\033[2F")
     sys.stdout.flush()
 
+# type 1 is character speech / narration
+# type 2 is a decision
+
+# I[] is intro
+
+# W[] is Worst Ending route (default)
+# B[] is Bad Ending route
+# O[] is Ok Ending route
+# G[] is Good Ending route
+# P[] is Perfect Ending route
+# S[] is Secret Ending
+
 story = {
     "intro" : {
         1 : {
-            "message" : "text",
-            "sped" : 1,
-            "" : "",
+            "message" : "test",
+            "speed" : 1,
+            "type" : 1,
+            "next" : "I2",
+            "events" : [""],
+        },
+
+        2: {
+            "message": "choose",
+            "speed": 1,
+            "type": 2,
+
+            "options" : ["A", "B"],
+            "results" : ["I3", "I4"],
+            "events" : [""],
+        },
+
+        3: {
+            "message": "abcabcabcabc",
+            "speed": 1,
+            "type": 1,
+            "next" : "I5",
+            "events" : [""],
+        },
+
+        4: {
+            "message": "defdefdefdef",
+            "speed": 1,
+            "type": 1,
+            "next" : "I5",
+            "events" : [""],
+        },
+
+        5: {
+            "message": "DONE",
+            "speed": 1,
+            "type": 1,
+            "next": -1,
+            "events": [""],
         },
     }
 }
@@ -142,6 +190,9 @@ plr = {
     "def" : 10,
     "hp" : 110,
 
+    "critChance": 12,
+    "missChance": 5,
+
     "mana" : 100,
 
     "title" : " the Hero",
@@ -150,7 +201,8 @@ plr = {
     "moves" : 5,
     "pos": 0,
 
-    "dif" : ""
+    "dif" : "",
+
 }
 
 enemyTemplates = {
@@ -160,6 +212,8 @@ enemyTemplates = {
         "atk" : 1,
         "def" : 0,
         "hp" : 100,
+        "critChance": 12,
+        "missChance": 5,
         "xp" : "tutorial",
         "name" : "",
         "battletext" : [""],
@@ -170,6 +224,8 @@ enemyTemplates = {
         "atk": 1,
         "def": 1,
         "hp": 6,
+        "critChance": 12,
+        "missChance": 5,
         "xp" : "low",
         "name" : "",
         "battletext" : [""],
@@ -180,6 +236,8 @@ enemyTemplates = {
         "atk": 7,
         "def": 5,
         "hp": 41,
+        "critChance": 12,
+        "missChance": 5,
         "xp" : "mid",
         "name" : "",
         "battletext" : [""],
@@ -190,6 +248,8 @@ enemyTemplates = {
         "atk": 15,
         "def": 7,
         "hp": 85,
+        "critChance": 12,
+        "missChance": 5,
         "xp" : "high",
         "name" : "",
         "battletext" : [""],
@@ -200,6 +260,8 @@ enemyTemplates = {
         "atk": 24,
         "def": 12,
         "hp": 150,
+        "critChance": 12,
+        "missChance": 5,
         "xp" : "miniboss",
         "name" : "",
         "battletext" : [""],
@@ -210,14 +272,13 @@ enemyTemplates = {
         "atk": 50,
         "def": 50,
         "hp": 350,
+        "critChance": 12,
+        "missChance": 5,
         "xp" : "finalboss",
         "name" : "",
         "battletext" : [""],
     },
 }
-
-critChance = 12
-missChance = 5
 
 def gameover():
     print("Game Over")
@@ -242,6 +303,57 @@ def animatetxt(msg, spd):
             wait((0.75/spd))
 
     print()
+
+def storymanager(scenecode):
+    scenecode = str(scenecode)
+
+    sceneDIR = ""
+    sceneNUMBER = -1
+
+    letter = scenecode[0]
+
+    if letter == "I":
+        sceneDIR = "intro"
+    elif letter == "W":
+        sceneDIR = "worst"
+    elif letter == "B":
+        sceneDIR = "bad"
+    elif letter == "O":
+        sceneDIR = "ok"
+    elif letter == "G":
+        sceneDIR = "good"
+    elif letter == "P":
+        sceneDIR = "perfect"
+
+    sceneNUMBER = int(scenecode[1:len(scenecode)])
+    print("Scene directory:", sceneDIR)
+    print("Scene number:", sceneNUMBER)
+
+    if story[sceneDIR][sceneNUMBER]["type"] == 1:
+
+        animatetxt((story[sceneDIR][sceneNUMBER]["message"]), (story[sceneDIR][sceneNUMBER]["speed"]))
+
+        if (story[sceneDIR][sceneNUMBER]["next"]) != -1:
+            storymanager(str(story[sceneDIR][sceneNUMBER]["next"]))
+
+    elif story[sceneDIR][sceneNUMBER]["type"] == 2:
+
+        animatetxt((story[sceneDIR][sceneNUMBER]["message"]), (story[sceneDIR][sceneNUMBER]["speed"]))
+        print("CHOOSE")
+        options = story[sceneDIR][sceneNUMBER]["options"]
+        counter = 0
+        for option in options:
+            counter += 1
+            print("["+str(counter)+"]", option)
+
+        choice = int(input("Choice: "))
+
+        while not choice <= counter or choice < 1:
+            choice = int(input("Choice: "))
+
+        storymanager(str(story[sceneDIR][sceneNUMBER]["results"][choice-1]))
+
+storymanager("I1")
 
 animatetxt("Welcome to...",1)
 print()
@@ -417,6 +529,19 @@ def battle(enemy):
         def attack(target, damage, skilla):
 
             chance = random.randint(1,100)
+
+            critChance = 0
+            missChance = 0
+
+            if target == "plr":
+                critChance = currentenemy["critChance"]
+            elif target == "enemy":
+                critChance = plr["critChance"]
+
+            if target == "plr":
+                critChance = currentenemy["missChance"]
+            elif target == "enemy":
+                critChance = plr["missChance"]
 
             if chance <= critChance:
                 damage = damage*(random.randint(2,3))
