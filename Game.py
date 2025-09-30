@@ -11,6 +11,16 @@ def refresh():
     sys.stdout.write("\033[2F")
     sys.stdout.flush()
 
+story = {
+    "intro" : {
+        1 : {
+            "message" : "text",
+            "sped" : 1,
+            "" : "",
+        },
+    }
+}
+
 skillShop = {
 
     "skills" : {
@@ -136,7 +146,6 @@ plr = {
 
     "title" : " the Hero",
 
-
     "scene": "Intro",
     "moves" : 5,
     "pos": 0,
@@ -229,6 +238,8 @@ def animatetxt(msg, spd):
         sys.stdout.write(chara)
         sys.stdout.flush()
         wait(0.25/spd)
+        if chara == ",":
+            wait((0.75/spd))
 
     print()
 
@@ -431,11 +442,6 @@ def battle(enemy):
             if skilla == 1:
                 print("a")
 
-        def changestat(target, stat, amount):
-
-           if target == "plr":
-                plr[stat] += amount
-
         plrchoice = action()
 
         cpuchoice = random.randint(1, 2)
@@ -468,7 +474,7 @@ def battle(enemy):
             print("Choose Your Upgrade")
             print("Skill Points:", plr["skillpoints"])
             for i in skillShop["skills"]:
-                if skillShop["skills"][i]["obtained"] == False:
+                if not skillShop["skills"][i]["obtained"]:
                     print(str(i)+":","SKILL NAME:", "<"+skillShop["skills"][i]["name"]+">")
                     print("SP COST:", skillShop["skills"][i]["spcost"])
 
@@ -586,6 +592,14 @@ def battle(enemy):
 if doTut.upper() == "Y":
     print("Proper Tutorial not yet implemented")
     #battle("Tutorial")
+
+animatetxt("???: Awaken now, hero!", 1.3)
+print()
+animatetxt("As you open your eyes, soft warm light fills them.",1.75)
+animatetxt("The surroundings around you become clear, and a cathedral comes into view. Many onlookers observe your every move, with tired yet hopeful faces",1.75)
+animatetxt("???: You have been chosen to save our world!",1.3)
+animatetxt("You've been isekai'd! Chosen as a legendary hero!!",2)
+animatetxt("Your old life",1.5)
 
 battle("Low")
 wait(3)
