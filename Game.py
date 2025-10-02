@@ -1,4 +1,5 @@
 import math
+import os
 import sys
 import time
 import random
@@ -6,6 +7,11 @@ import copy
 
 def wait(secs):
    time.sleep(secs)
+
+def clear():
+    wait(1)
+    #print('Clear')
+    os.system("cls")
 
 def refresh():
     sys.stdout.write("\033[2F")
@@ -23,14 +29,16 @@ def refresh():
 # P[] is Perfect Ending route
 # S[] is Secret Ending
 
+
 story = {
-    "intro" : {
-        1 : {
-            "message" : "test",
-            "speed" : 1,
-            "type" : 1,
-            "next" : "I2",
-            "events" : [""],
+
+    "templates" : {
+        1: {
+            "message": "test",
+            "speed": 1,
+            "type": 1,
+            "next": "I2",
+            "events": [""],
         },
 
         2: {
@@ -38,34 +46,76 @@ story = {
             "speed": 1,
             "type": 2,
 
-            "options" : ["A", "B"],
-            "results" : ["I3", "I4"],
-            "events" : [""],
+            "options": ["A", "B"],
+            "results": ["I3", "I4"],
+            "events": [""],
+        },
+    },
+
+    "intro" : {
+        1 : {
+            "message" : "???: Awaken now, hero!",
+            "speed" : 1.3,
+            "type" : 1,
+            "next" : "I2",
+            "events": "",
+            "delay" : 1,
+        },
+
+        2 : {
+            "message" : "As you open your eyes, soft warm light fills them.",
+            "speed" : 1.75,
+            "type" : 1,
+            "next" : "I3",
+            "events": "",
+            "delay" : 1,
         },
 
         3: {
-            "message": "abcabcabcabc",
-            "speed": 1,
+            "message": "The surroundings around you become clear, and a cathedral comes into view. Many onlookers observe your every move, with tired yet hopeful faces",
+            "speed": 1.75,
             "type": 1,
-            "next" : "I5",
-            "events" : [""],
+            "next": "I4",
+            "events": "",
+            "delay" : 1,
         },
 
         4: {
-            "message": "defdefdefdef",
-            "speed": 1,
+            "message": "???: You have been chosen to save our world!",
+            "speed": 1.3,
             "type": 1,
-            "next" : "I5",
-            "events" : [""],
+            "next": "I5",
+            "events": "",
+            "delay" : 1,
         },
 
         5: {
-            "message": "DONE",
+            "message": "You've been isekai'd! Chosen as a legendary hero!!",
+            "speed": 2,
+            "type": 1,
+            "next": "I6",
+            "events": "",
+            "delay" : 1,
+        },
+
+        6: {
+            "message": "Your old life is no longer, and a life full of adventure, riches and fame awaits you as the hero of this world!",
+            "speed": 1.75,
+            "type": 1,
+            "next": "I99",
+            "events": "",
+            "delay" : 1,
+        },
+
+        99: {
+            "message": "test",
             "speed": 1,
             "type": 1,
             "next": -1,
-            "events": [""],
+            "events": "",
+            "delay" : 1,
         },
+
     }
 }
 
@@ -298,17 +348,21 @@ def animatetxt(msg, spd):
     for chara in msg:
         sys.stdout.write(chara)
         sys.stdout.flush()
-        wait(0.25/spd)
+        wait(0.1/spd)
         if chara == ",":
-            wait((0.75/spd))
+            wait((0.5/spd))
 
     print()
 
 def storymanager(scenecode):
+
+    def event(newevent):
+        print(newevent)
+
     scenecode = str(scenecode)
 
     sceneDIR = ""
-    sceneNUMBER = -1
+    sceneNUMBER = 0
 
     letter = scenecode[0]
 
@@ -326,14 +380,19 @@ def storymanager(scenecode):
         sceneDIR = "perfect"
 
     sceneNUMBER = int(scenecode[1:len(scenecode)])
-    print("Scene directory:", sceneDIR)
-    print("Scene number:", sceneNUMBER)
+    #print("Scene directory:", sceneDIR)
+    #print("Scene number:", sceneNUMBER)
 
     if story[sceneDIR][sceneNUMBER]["type"] == 1:
 
         animatetxt((story[sceneDIR][sceneNUMBER]["message"]), (story[sceneDIR][sceneNUMBER]["speed"]))
 
+        if story[sceneDIR][sceneNUMBER]["events"] != "":
+            print(story[sceneDIR][sceneNUMBER]["events"])
+            print("EVENT DETECTED")
+
         if (story[sceneDIR][sceneNUMBER]["next"]) != -1:
+            wait(story[sceneDIR][sceneNUMBER]["delay"])
             storymanager(str(story[sceneDIR][sceneNUMBER]["next"]))
 
     elif story[sceneDIR][sceneNUMBER]["type"] == 2:
@@ -353,11 +412,10 @@ def storymanager(scenecode):
 
         storymanager(str(story[sceneDIR][sceneNUMBER]["results"][choice-1]))
 
-storymanager("I1")
-
 animatetxt("Welcome to...",1)
 print()
-animatetxt(""" .d8888b.  888                                                  8888888     888 d8b          888         888    888                          888 
+animatetxt("""
+ .d8888b.  888                                                  8888888     888 d8b          888         888    888                          888 
 d88P  Y88b 888                                                    888       888 Y8P          888         888    888                          888 
 888    888 888                                                    888       888              888         888    888                          888 
 888        88888b.   .d88b.   .d88b.  .d8888b   .d88b.            888   .d88888 888  .d88b.  888888      8888888888  .d88b.  888d888 .d88b.  888 
@@ -367,10 +425,11 @@ Y88b  d88P 888  888 Y88..88P Y88..88P      X88 Y8b.    d8b        888  Y88b 888 
  "Y8888P"  888  888  "Y88P"   "Y88P"   88888P'  "Y8888 88P      8888888 "Y88888 888  "Y88P"   "Y888      888    888  "Y8888  888     "Y88P"  888 
                                                        8P                                                                                        
                                                        "                                                                                         
-                                                                                                                                                 """, 100)
+                                                                                                                                                 """, 500)
 wait(1)
-
 input("Press enter to continue...")
+
+clear()
 
 print("First, please enter a name")
 plr["name"] = input()
@@ -392,7 +451,6 @@ if plr["name"] == "Zeri":
     plr["weapon"] = "Strong ahh stick"
 
     specialStory = True
-
 elif plr["name"] == "Hero":
     animatetxt("So you've chosen this path...", 0.9)
     plr["hp"] = 2
@@ -408,7 +466,6 @@ elif plr["name"] == "Hero":
     enemyTemplates["finalboss"]["atk"] = 75
 
     specialStory = True
-
 elif plr["name"] == "Clovii":
     animatetxt("Goodluck... :)", 0.9)
     plr["hp"] = 5
@@ -428,7 +485,6 @@ elif plr["name"] == "Clovii":
     enemyTemplates["finalboss"]["titles"] = ["Full Power Zeri"]
 
     specialStory = True
-
 elif plr["name"] == "Test":
     plr["dif"] = "NORMAL"
     plr["level"] = 0
@@ -499,14 +555,12 @@ tutorialComplete = False
 
 def battle(enemy):
 
-    turn = 0
+    clear()
 
-    print("Turn " + str(turn))
+    turn = 1
 
     currentenemy = copy.deepcopy(enemyTemplates[enemy.lower()])
     currentenemy["name"] = enemyTemplates[enemy.lower()]["titles"][(random.randint(1, len(enemyTemplates[enemy.lower()]["titles"]))) - 1]
-
-    print(plr["name"], "VS.", currentenemy["name"] + "!")
 
     if enemy.lower() == "tutorial":
         while not tutorialComplete:
@@ -516,14 +570,24 @@ def battle(enemy):
     while plr["hp"] > 0 and currentenemy["hp"] > 0:
 
         def action():
+
+            wait(3)
+            clear()
+
+            print(plr["name"], "VS.", currentenemy["name"] + "!")
+            print()
+
             wait(1)
-            refresh()
+
+            print("{ TURN " + str(turn) + " }")
             if (plr["mana"] + 10) <= 100: plr["mana"] += 10
             print("Current Mana:", plr["mana"], "/", plr["maxmana"])
             print("Current HP:", plr["hp"], "/", plr["maxhp"])
             nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
+            print()
             while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "SKILL" and nextaction.upper() != "ITEM" and nextaction.upper() != "RUN" and nextaction.upper() != "UPGRADE" and nextaction != "1" and nextaction != "2" and nextaction != "3" and nextaction != "4" and nextaction != "5" and nextaction != "6":
                 nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
+                print()
             return nextaction
 
         def attack(target, damage, skilla):
@@ -677,14 +741,12 @@ def battle(enemy):
                 plr["level"] = levels
                 return totalxp
 
-            wait(2)
-
             if oldlevel < 999:
 
                 plr["nextxp"] = (100+(10*plr["level"]) - levelandxp(plr["xp"], 0))
 
                 if plr["level"] == oldlevel:
-                    print(print("XP till next level:", plr["nextxp"]))
+                    print("XP till next level:", plr["nextxp"])
 
                 if plr["level"] > oldlevel:
                     print("LEVEL UP!")
@@ -704,11 +766,14 @@ def battle(enemy):
                     plr["mana"] = plr["maxmana"]
                     print()
                     showstats()
+                    wait(3)
                 break
             else:
                 print("Level MAX!")
 
             print()
+
+            wait(2)
 
         turn += 1
 
@@ -718,28 +783,27 @@ if doTut.upper() == "Y":
     print("Proper Tutorial not yet implemented")
     #battle("Tutorial")
 
-animatetxt("???: Awaken now, hero!", 1.3)
-print()
-animatetxt("As you open your eyes, soft warm light fills them.",1.75)
-animatetxt("The surroundings around you become clear, and a cathedral comes into view. Many onlookers observe your every move, with tired yet hopeful faces",1.75)
-animatetxt("???: You have been chosen to save our world!",1.3)
-animatetxt("You've been isekai'd! Chosen as a legendary hero!!",2)
-animatetxt("Your old life",1.5)
+wait(1)
 
-battle("Low")
-wait(3)
-battle("Mid")
-wait(3)
-battle("High")
-wait(3)
-battle("Miniboss")
-wait(3)
-battle("Low")
-wait(3)
+clear()
 
-if plr["name"] == "Clovii":
-    animatetxt("Wait a minute", 5)
-    animatetxt("You got a few more enemies to deal with!", 10)
+wait(1)
+
+if not specialStory:
+
+    storymanager("I1")
+
+    animatetxt("ABCDEF BATTLE TEST", 1)
+
+    battle("Low")
+    battle("Mid")
+    battle("High")
+    battle("Miniboss")
+    battle("Low")
+    battle("Finalboss")
+
+elif plr["name"] == "Clovii":
+    animatetxt("Just because I added a story to the base game doesn't mean that you get to do whatever you want now!", 2)
     wait(3)
 
     while plr["level"] < 999:
@@ -751,4 +815,4 @@ if plr["name"] == "Clovii":
         elif newEn == 3:
             battle("Miniboss")
 
-battle("Finalboss")
+    battle("Finalboss")
