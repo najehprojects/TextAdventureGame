@@ -13,10 +13,6 @@ def clear():
     #print('Clear')
     os.system("cls")
 
-def refresh():
-    sys.stdout.write("\033[2F")
-    sys.stdout.flush()
-
 # type 1 is character speech / narration
 # type 2 is a decision
 
