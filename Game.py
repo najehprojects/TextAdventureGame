@@ -98,6 +98,15 @@ story = {
             "message": "Your old life is no longer, and a life full of adventure, riches and fame awaits you as the hero of this world!",
             "speed": 1.75,
             "type": 1,
+            "next": "I7",
+            "events": "",
+            "delay" : 1,
+        },
+
+        7: {
+            "message": "???: Brave hero, we require your immense strength to defeat the demon lord, Mr. Demon Lord!!!",
+            "speed": 1.3,
+            "type": 1,
             "next": "I99",
             "events": "",
             "delay" : 1,
