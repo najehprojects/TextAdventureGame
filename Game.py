@@ -243,7 +243,7 @@ plr = {
 
     "atk" : 20,
     "def" : 10,
-    "hp" : 110,
+    "hp" : 100,
 
     "critChance": 12,
     "missChance": 5,
@@ -658,10 +658,23 @@ def battle(enemy):
                     print()
 
         elif plrchoice == "SKILL" or plrchoice == "3":
-            print()
-            print("Choose Your Skill")
-            for skill in plr["skills"]:
-                print(skill)
+            if len(plr["skills"]) > 0:
+                print()
+                print("Choose Your Skill")
+                count = 1
+                for skill in plr["skills"]:
+                    print(str(count) + ":", "SKILL NAME:", "<" + skill + ">")
+                    count += 1
+
+                chosenupgrade = input("Choose your Upgrade: ")
+
+                found = False
+
+                if chosenupgrade.isdigit():
+                    chosenupgrade = int(chosenupgrade)
+            else:
+                print("No Skills!!")
+                action()
 
         elif plrchoice == "UPGRADE" or plrchoice == "6":
             print()
@@ -674,20 +687,34 @@ def battle(enemy):
 
             chosenupgrade = input("Choose your Upgrade: ")
 
-            for _ in skillShop["skills"]:
+            found = False
+            bought = False
 
-                if skillShop["skills"][_]["name"] == chosenupgrade and plr["skillpoints"] >= skillShop["skills"][_]["spcost"] and skillShop["skills"][_]["obtained"] == False:
-                    print("BOUGHT SKILL", skillShop["skills"][_]["name"])
-                    plr["skillpoints"] -= skillShop["skills"][_]["spcost"]
-                    plr["skills"].append(skillShop["skills"][_]["name"])
-                    skillShop["skills"][_]["obtained"] = True
+            if chosenupgrade.isdigit():
+                chosenupgrade = int(chosenupgrade)
 
-                else:
-                    while True:
-                        for _ in skillShop["skills"]:
-                            if skillShop["skills"][_]["name"] == chosenupgrade and plr["skillpoints"] >= skillShop["skills"][_]["spcost"] and skillShop["skills"][_]["obtained"] == False:
-                                break
-                        chosenupgrade = input("Invalid Option, Choose your Upgrade: ")
+            while not found:
+
+                for skillEntry in skillShop["skills"]:
+                    if skillShop["skills"][skillEntry]["name"] == chosenupgrade or skillEntry == chosenupgrade:
+                        if plr["skillpoints"] >= skillShop["skills"][skillEntry]["spcost"] and skillShop["skills"][skillEntry]["obtained"] == False:
+                            print("BOUGHT SKILL", skillShop["skills"][skillEntry]["name"])
+                            plr["skillpoints"] -= skillShop["skills"][skillEntry]["spcost"]
+                            plr["skills"].append(skillShop["skills"][skillEntry]["name"])
+                            skillShop["skills"][skillEntry]["obtained"] = True
+                            found = True
+                            bought = True
+                        else:
+                            if skillShop["skills"][skillEntry]["obtained"] == True:
+                                print("You already have it somehow???")
+                                found = True
+                            if plr["skillpoints"] < skillShop["skills"][skillEntry]["spcost"]:
+                                print("BROKE BOI")
+                                found = True
+
+            if not bought:
+                print("Upgrade unavailable")
+                action()
 
         if currentenemy["hp"] >= 1:
             if cpuchoice == 1:
@@ -792,6 +819,8 @@ wait(1)
 
 clear()
 
+print("a")
+
 wait(1)
 
 if not specialStory:
@@ -821,3 +850,15 @@ elif plr["name"] == "Clovii":
             battle("Miniboss")
 
     battle("Finalboss")
+
+elif plr["name"] == "Test":
+    while plr["level"] < 999:
+        newEn = random.randint(1,4)
+        if newEn == 1:
+            battle("Low")
+        elif newEn == 2:
+            battle("Mid")
+        elif newEn == 3:
+            battle("High")
+        elif newEn == 4:
+            battle("Miniboss")
