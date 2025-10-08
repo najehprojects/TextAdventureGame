@@ -44,7 +44,7 @@ story = {
 
             "options": ["A", "B"],
             "results": ["I3", "I4"],
-            "events": [""],
+            "events": [],
         },
     },
 
@@ -54,7 +54,7 @@ story = {
             "speed" : 1.3,
             "type" : 1,
             "next" : "I2",
-            "events": "",
+            "events": [],
             "delay" : 1,
         },
 
@@ -63,7 +63,7 @@ story = {
             "speed" : 1.75,
             "type" : 1,
             "next" : "I3",
-            "events": "",
+            "events": [],
             "delay" : 1,
         },
 
@@ -72,7 +72,7 @@ story = {
             "speed": 1.75,
             "type": 1,
             "next": "I4",
-            "events": "",
+            "events": [],
             "delay" : 1,
         },
 
@@ -81,7 +81,7 @@ story = {
             "speed": 1.3,
             "type": 1,
             "next": "I5",
-            "events": "",
+            "events": [],
             "delay" : 1,
         },
 
@@ -90,7 +90,7 @@ story = {
             "speed": 2,
             "type": 1,
             "next": "I6",
-            "events": "",
+            "events": [],
             "delay" : 1,
         },
 
@@ -99,7 +99,7 @@ story = {
             "speed": 1.75,
             "type": 1,
             "next": "I7",
-            "events": "",
+            "events": [],
             "delay" : 1,
         },
 
@@ -108,7 +108,7 @@ story = {
             "speed": 1.3,
             "type": 1,
             "next": "I99",
-            "events": "",
+            "events": [],
             "delay" : 1,
         },
 
@@ -117,7 +117,7 @@ story = {
             "speed": 1,
             "type": 1,
             "next": -1,
-            "events": "",
+            "events": [],
             "delay" : 1,
         },
 
@@ -229,9 +229,9 @@ plr = {
     "name" : "",
     "weapon" : "None",
 
-    "inventory": [""],
+    "inventory": [],
 
-    "skills" : [""],
+    "skills" : [],
 
     "level" : 66,
     "xp" : 28710,
@@ -271,7 +271,7 @@ enemyTemplates = {
         "missChance": 5,
         "xp" : "tutorial",
         "name" : "",
-        "battletext" : [""],
+        "battletext" : [],
     },
 
     "low" : {
@@ -283,7 +283,7 @@ enemyTemplates = {
         "missChance": 5,
         "xp" : "low",
         "name" : "",
-        "battletext" : [""],
+        "battletext" : [],
     },
 
     "mid" : {
@@ -295,7 +295,7 @@ enemyTemplates = {
         "missChance": 5,
         "xp" : "mid",
         "name" : "",
-        "battletext" : [""],
+        "battletext" : [],
     },
 
     "high": {
@@ -307,7 +307,7 @@ enemyTemplates = {
         "missChance": 5,
         "xp" : "high",
         "name" : "",
-        "battletext" : [""],
+        "battletext" : [],
     },
 
     "miniboss": {
@@ -319,7 +319,7 @@ enemyTemplates = {
         "missChance": 5,
         "xp" : "miniboss",
         "name" : "",
-        "battletext" : [""],
+        "battletext" : [],
     },
 
     "finalboss": {
@@ -331,7 +331,7 @@ enemyTemplates = {
         "missChance": 5,
         "xp" : "finalboss",
         "name" : "",
-        "battletext" : [""],
+        "battletext" : [],
     },
 }
 
@@ -574,6 +574,107 @@ def battle(enemy):
 
     while plr["hp"] > 0 and currentenemy["hp"] > 0:
 
+        def activity(choice):
+
+            cpuchoice = random.randint(1, 2)
+
+            if choice == "ATK" or choice == "1":
+                if cpuchoice == 1:
+                    attack("enemy", plr["atk"], 0)
+                    wait(1)
+                    print()
+                if cpuchoice == 2:
+                    if math.ceil(plr["atk"] - currentenemy["def"]) >= 0:
+                        attack("enemy", math.ceil(plr["atk"] - currentenemy["def"]), 0)
+                        print(currentenemy["name"], "defended! DMG DOWN")
+                        wait(1)
+                        print()
+                    else:
+                        attack("enemy", 1,0)
+                        print(currentenemy["name"], "defended! DMG DOWN")
+                        wait(1)
+                        print()
+
+            elif choice == "SKILL" or choice == "3":
+                if len(plr["skills"]) > 0:
+                    print()
+                    print("Choose Your Skill")
+                    count = 1
+                    for skill in plr["skills"]:
+                        print(str(count) + ":", "SKILL NAME:", "<" + skill + ">")
+                        count += 1
+
+                    chosenupgrade = input("Choose your Upgrade: ")
+
+                    found = False
+
+                    if chosenupgrade.isdigit():
+                        chosenupgrade = int(chosenupgrade)
+                else:
+                    print("No Skills!!")
+
+            elif choice == "UPGRADE" or choice == "6":
+                print()
+                print("Choose Your Upgrade")
+                print("Skill Points:", plr["skillpoints"])
+                for i in skillShop["skills"]:
+                    if not skillShop["skills"][i]["obtained"]:
+                        print(str(i)+":","SKILL NAME:", "<"+skillShop["skills"][i]["name"]+">")
+                        print("SP COST:", skillShop["skills"][i]["spcost"])
+
+                chosenupgrade = input("Choose your Upgrade: ")
+
+                found = False
+                bought = False
+
+                if chosenupgrade.isdigit():
+                    chosenupgrade = int(chosenupgrade)
+
+                while not found:
+
+                    for skillEntry in skillShop["skills"]:
+                        if skillShop["skills"][skillEntry]["name"] == chosenupgrade or skillEntry == chosenupgrade:
+                            if plr["skillpoints"] >= skillShop["skills"][skillEntry]["spcost"] and skillShop["skills"][skillEntry]["obtained"] == False:
+                                print("BOUGHT SKILL", skillShop["skills"][skillEntry]["name"])
+                                plr["skillpoints"] -= skillShop["skills"][skillEntry]["spcost"]
+                                plr["skills"].append(skillShop["skills"][skillEntry]["name"])
+                                skillShop["skills"][skillEntry]["obtained"] = True
+                                found = True
+                                bought = True
+                            else:
+                                if skillShop["skills"][skillEntry]["obtained"] == True:
+                                    print("You already have it somehow???")
+                                    found = True
+                                if plr["skillpoints"] < skillShop["skills"][skillEntry]["spcost"]:
+                                    print("BROKE BOI")
+                                    found = True
+
+                if not bought:
+                    print("Upgrade unavailable")
+                    action()
+
+            if currentenemy["hp"] >= 1:
+                if cpuchoice == 1:
+                    if choice == "ATK" or choice == "1":
+                        attack("plr", currentenemy["atk"], 0)
+                        wait(1)
+                        print()
+                    if choice == "DEF" or choice == "2":
+                        if math.ceil(currentenemy["atk"] - plr["def"]) >= 0:
+                            print("You defended! DMG TAKEN DOWN")
+                            attack("plr", math.ceil(currentenemy["atk"] - plr["def"]), 0)
+                            wait(1)
+                            print()
+                        else:
+                            print("You defended! DMG TAKEN DOWN")
+                            attack("plr", 1, 0)
+                            wait(1)
+                            print()
+
+            if choice == "2" and cpuchoice == 2 or choice == "DEF" and cpuchoice == 2:
+                print("Both Parties Defended! No Damage was taken or dealt!")
+                print()
+
         def action():
 
             wait(3)
@@ -593,7 +694,8 @@ def battle(enemy):
             while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "SKILL" and nextaction.upper() != "ITEM" and nextaction.upper() != "RUN" and nextaction.upper() != "UPGRADE" and nextaction != "1" and nextaction != "2" and nextaction != "3" and nextaction != "4" and nextaction != "5" and nextaction != "6":
                 nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
                 print()
-            return nextaction
+
+            activity(nextaction)
 
         def attack(target, damage, skilla):
 
@@ -636,107 +738,7 @@ def battle(enemy):
             if skilla == 1:
                 print("a")
 
-        plrchoice = action()
-
-        cpuchoice = random.randint(1, 2)
-
-        if plrchoice == "ATK" or plrchoice == "1":
-            if cpuchoice == 1:
-                attack("enemy", plr["atk"], 0)
-                wait(1)
-                print()
-            if cpuchoice == 2:
-                if math.ceil(plr["atk"] - currentenemy["def"]) >= 0:
-                    attack("enemy", math.ceil(plr["atk"] - currentenemy["def"]), 0)
-                    print(currentenemy["name"], "defended! DMG DOWN")
-                    wait(1)
-                    print()
-                else:
-                    attack("enemy", 1,0)
-                    print(currentenemy["name"], "defended! DMG DOWN")
-                    wait(1)
-                    print()
-
-        elif plrchoice == "SKILL" or plrchoice == "3":
-            if len(plr["skills"]) > 0:
-                print()
-                print("Choose Your Skill")
-                count = 1
-                for skill in plr["skills"]:
-                    print(str(count) + ":", "SKILL NAME:", "<" + skill + ">")
-                    count += 1
-
-                chosenupgrade = input("Choose your Upgrade: ")
-
-                found = False
-
-                if chosenupgrade.isdigit():
-                    chosenupgrade = int(chosenupgrade)
-            else:
-                print("No Skills!!")
-                action()
-
-        elif plrchoice == "UPGRADE" or plrchoice == "6":
-            print()
-            print("Choose Your Upgrade")
-            print("Skill Points:", plr["skillpoints"])
-            for i in skillShop["skills"]:
-                if not skillShop["skills"][i]["obtained"]:
-                    print(str(i)+":","SKILL NAME:", "<"+skillShop["skills"][i]["name"]+">")
-                    print("SP COST:", skillShop["skills"][i]["spcost"])
-
-            chosenupgrade = input("Choose your Upgrade: ")
-
-            found = False
-            bought = False
-
-            if chosenupgrade.isdigit():
-                chosenupgrade = int(chosenupgrade)
-
-            while not found:
-
-                for skillEntry in skillShop["skills"]:
-                    if skillShop["skills"][skillEntry]["name"] == chosenupgrade or skillEntry == chosenupgrade:
-                        if plr["skillpoints"] >= skillShop["skills"][skillEntry]["spcost"] and skillShop["skills"][skillEntry]["obtained"] == False:
-                            print("BOUGHT SKILL", skillShop["skills"][skillEntry]["name"])
-                            plr["skillpoints"] -= skillShop["skills"][skillEntry]["spcost"]
-                            plr["skills"].append(skillShop["skills"][skillEntry]["name"])
-                            skillShop["skills"][skillEntry]["obtained"] = True
-                            found = True
-                            bought = True
-                        else:
-                            if skillShop["skills"][skillEntry]["obtained"] == True:
-                                print("You already have it somehow???")
-                                found = True
-                            if plr["skillpoints"] < skillShop["skills"][skillEntry]["spcost"]:
-                                print("BROKE BOI")
-                                found = True
-
-            if not bought:
-                print("Upgrade unavailable")
-                action()
-
-        if currentenemy["hp"] >= 1:
-            if cpuchoice == 1:
-                if plrchoice == "ATK" or plrchoice == "1":
-                    attack("plr", currentenemy["atk"], 0)
-                    wait(1)
-                    print()
-                if plrchoice == "DEF" or plrchoice == "2":
-                    if math.ceil(currentenemy["atk"] - plr["def"]) >= 0:
-                        print("You defended! DMG TAKEN DOWN")
-                        attack("plr", math.ceil(currentenemy["atk"] - plr["def"]), 0)
-                        wait(1)
-                        print()
-                    else:
-                        print("You defended! DMG TAKEN DOWN")
-                        attack("plr", 1, 0)
-                        wait(1)
-                        print()
-
-        if plrchoice == "2" and cpuchoice == 2 or plrchoice == "DEF" and cpuchoice == 2:
-            print("Both Parties Defended! No Damage was taken or dealt!")
-            print()
+        action()
 
         if plr["hp"] <= 0:
             gameover()
