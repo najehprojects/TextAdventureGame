@@ -238,12 +238,12 @@ plr = {
 
     "skillpoints" : 3,
 
-    "maxhp" : 100,
+    "maxhp" : 110,
     "maxmana" : 100,
 
     "atk" : 20,
     "def" : 10,
-    "hp" : 100,
+    "hp" : 110,
 
     "critChance": 12,
     "missChance": 5,
