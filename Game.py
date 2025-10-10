@@ -134,6 +134,7 @@ skillShop = {
             "manacost": 45,
 
             "healamount": 10,
+
             "obtained" : False,
         },
 
@@ -145,6 +146,7 @@ skillShop = {
             "debufftype" : "atk",
             "debuffamount": 5,
             "debuffduration" : 2,
+
             "obtained" : False,
         },
 
@@ -154,6 +156,7 @@ skillShop = {
             "manacost": 40,
 
             "damage" : 25,
+
             "obtained" : False,
         },
 
@@ -163,6 +166,7 @@ skillShop = {
             "manacost": 50,
 
             "healpercentage": 25,
+
             "obtained" : False,
         },
 
@@ -175,6 +179,7 @@ skillShop = {
             "debufftype": "def",
             "debuffamount": 5,
             "debuffduration" : 5,
+
             "obtained" : False,
         },
 
@@ -184,22 +189,22 @@ skillShop = {
             "manacost": 50,
 
             "damage" : 35,
+
             "obtained" : False,
         },
 
         7 : {
             "spcost": 10,
-
             "name": "Master Heal",
             "manacost": 75,
 
             "healpercentage": 50,
+
             "obtained" : False,
         },
 
         8 : {
             "spcost": 10,
-
             "name": "Venom",
             "manacost" : 65,
 
@@ -208,16 +213,17 @@ skillShop = {
             "debufftype" : "def",
             "debuffamount" : 10,
             "debuffduration" : 4,
+
             "obtained" : False,
         },
 
         9 : {
             "spcost": 10,
-
             "name": "Execute",
             "manacost": 75,
 
             "damage" : 65,
+
             "obtained" : False,
         },
 
