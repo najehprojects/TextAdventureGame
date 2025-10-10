@@ -444,7 +444,7 @@ while plr["name"] == "":
 
 specialStory = False
 
-if plr["name"] == "Zeri":
+if plr["name"].upper() == "ZERI":
     plr["maxhp"] = 99999999999999
     plr["hp"] = 99999999999999
     plr["dif"] = "NORMAL"
@@ -456,7 +456,7 @@ if plr["name"] == "Zeri":
     plr["weapon"] = "Strong ahh stick"
 
     specialStory = True
-elif plr["name"] == "Hero":
+elif plr["name"].upper() == "HERO":
     animatetxt("So you've chosen this path...", 0.9)
     plr["hp"] = 2
     plr["maxhp"] = 2
@@ -471,7 +471,7 @@ elif plr["name"] == "Hero":
     enemyTemplates["finalboss"]["atk"] = 75
 
     specialStory = True
-elif plr["name"] == "Clovii":
+elif plr["name"].upper() == "CLOVII":
     animatetxt("Goodluck... :)", 0.9)
     plr["hp"] = 5
     plr["maxhp"] = 5
@@ -490,7 +490,7 @@ elif plr["name"] == "Clovii":
     enemyTemplates["finalboss"]["titles"] = ["Full Power Zeri"]
 
     specialStory = True
-elif plr["name"] == "Test":
+elif plr["name"].upper() == "TEST":
     plr["dif"] = "NORMAL"
     plr["level"] = 0
     plr["xp"] = 0
@@ -614,8 +614,10 @@ def battle(enemy):
                     print("No Skills!!")
 
             elif choice == "UPGRADE" or choice == "6":
-                print()
-                print("Choose Your Upgrade")
+                print("""
+                Choose Your Upgrade
+                [BACK] to exit
+                """)
                 print("Skill Points:", plr["skillpoints"])
                 for i in skillShop["skills"]:
                     if not skillShop["skills"][i]["obtained"]:
@@ -624,30 +626,34 @@ def battle(enemy):
 
                 chosenupgrade = input("Choose your Upgrade: ")
 
-                found = False
+                while chosenupgrade == "":
+                    chosenupgrade = input("Choose your Upgrade: ")
+
+                chosenupgrade = chosenupgrade.upper()
+
+                if chosenupgrade == "BACK":
+                    action()
+
                 bought = False
 
                 if chosenupgrade.isdigit():
                     chosenupgrade = int(chosenupgrade)
 
-                while not found:
-
-                    for skillEntry in skillShop["skills"]:
-                        if skillShop["skills"][skillEntry]["name"] == chosenupgrade or skillEntry == chosenupgrade:
-                            if plr["skillpoints"] >= skillShop["skills"][skillEntry]["spcost"] and skillShop["skills"][skillEntry]["obtained"] == False:
-                                print("BOUGHT SKILL", skillShop["skills"][skillEntry]["name"])
-                                plr["skillpoints"] -= skillShop["skills"][skillEntry]["spcost"]
-                                plr["skills"].append(skillShop["skills"][skillEntry]["name"])
-                                skillShop["skills"][skillEntry]["obtained"] = True
-                                found = True
-                                bought = True
-                            else:
-                                if skillShop["skills"][skillEntry]["obtained"] == True:
-                                    print("You already have it somehow???")
-                                    found = True
-                                if plr["skillpoints"] < skillShop["skills"][skillEntry]["spcost"]:
-                                    print("BROKE BOI")
-                                    found = True
+                for skillEntry in skillShop["skills"]:
+                    if skillShop["skills"][skillEntry]["name"].upper() == chosenupgrade or skillEntry == chosenupgrade:
+                        if plr["skillpoints"] >= skillShop["skills"][skillEntry]["spcost"] and skillShop["skills"][skillEntry]["obtained"] == False:
+                            print("BOUGHT SKILL", skillShop["skills"][skillEntry]["name"])
+                            plr["skillpoints"] -= skillShop["skills"][skillEntry]["spcost"]
+                            plr["skills"].append(skillShop["skills"][skillEntry]["name"])
+                            skillShop["skills"][skillEntry]["obtained"] = True
+                            bought = True
+                            print(bought)
+                            break
+                        else:
+                            if skillShop["skills"][skillEntry]["obtained"] == True:
+                                print("You already have it somehow???")
+                            if plr["skillpoints"] < skillShop["skills"][skillEntry]["spcost"]:
+                                print("BROKE BOI")
 
                 if not bought:
                     print("Upgrade unavailable")
@@ -677,6 +683,8 @@ def battle(enemy):
 
         def action():
 
+            nextaction = 0
+
             wait(3)
             clear()
 
@@ -689,10 +697,10 @@ def battle(enemy):
             if (plr["mana"] + 10) <= 100: plr["mana"] += 10
             print("Current Mana:", plr["mana"], "/", plr["maxmana"])
             print("Current HP:", plr["hp"], "/", plr["maxhp"])
-            nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
+            nextaction = input("Choose your action [ ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
             print()
             while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "SKILL" and nextaction.upper() != "ITEM" and nextaction.upper() != "RUN" and nextaction.upper() != "UPGRADE" and nextaction != "1" and nextaction != "2" and nextaction != "3" and nextaction != "4" and nextaction != "5" and nextaction != "6":
-                nextaction = input("Choose your action [ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
+                nextaction = input("Choose your action [ ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
                 print()
 
             activity(nextaction)
@@ -821,8 +829,6 @@ wait(1)
 
 clear()
 
-print("a")
-
 wait(1)
 
 if not specialStory:
@@ -838,7 +844,7 @@ if not specialStory:
     battle("Low")
     battle("Finalboss")
 
-elif plr["name"] == "Clovii":
+elif plr["name"].upper() == "CLOVII":
     animatetxt("Just because I added a story to the base game doesn't mean that you get to do whatever you want now!", 2)
     wait(3)
 
@@ -853,7 +859,7 @@ elif plr["name"] == "Clovii":
 
     battle("Finalboss")
 
-elif plr["name"] == "Test":
+elif plr["name"].upper() == "TEST":
     while plr["level"] < 999:
         newEn = random.randint(1,4)
         if newEn == 1:
