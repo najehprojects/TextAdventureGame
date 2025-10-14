@@ -24,8 +24,11 @@ def clear():
 # P[] is Perfect Ending route
 # S[] is Secret Ending
 
-
 story = {
+
+    "info" : {
+        "lastSpeaker": "???",
+    },
 
     "templates" : {
         1: {
@@ -33,7 +36,6 @@ story = {
             "speed": 1,
             "type": 1,
             "next": "I2",
-            "events": [""],
         },
 
         2: {
@@ -43,98 +45,97 @@ story = {
 
             "options": ["A", "B"],
             "results": ["I3", "I4"],
-            "events": [],
         },
     },
 
     "intro" : {
         1 : {
-            "message" : "???: Awaken now, hero!",
+            "speaker" : "???",
+            "message" : "Awaken now, hero!",
             "speed" : 1.3,
             "type" : 1,
             "next" : "I2",
-            "events": [],
             "delay" : 1,
         },
 
         2 : {
+            "speaker" : "",
             "message" : "As you open your eyes, soft warm light fills them.",
             "speed" : 1.75,
             "type" : 1,
             "next" : "I3",
-            "events": [],
             "delay" : 1,
         },
 
         3: {
+            "speaker" : "",
             "message": "The surroundings around you become clear, and a cathedral comes into view.",
             "speed": 1.75,
             "type": 1,
             "next": "I4",
-            "events": [],
             "delay" : 1,
         },
 
         4: {
+            "speaker" : "",
             "message": "Many onlookers observe your every move, with tired yet hopeful faces",
             "speed": 1.75,
             "type": 1,
             "next": "I5",
-            "events": [],
             "delay": 1,
         },
 
         5: {
-            "message": "???: You have been chosen to save our world!",
+            "speaker" : "???",
+            "message": "You have been chosen to save our world!",
             "speed": 1.3,
             "type": 1,
             "next": "I6",
-            "events": [],
             "delay" : 1,
         },
 
         6: {
+            "speaker" : "",
             "message": "You've been isekai'd! Chosen as a legendary hero!!",
             "speed": 2,
             "type": 1,
             "next": "I7",
-            "events": [],
             "delay" : 1,
         },
 
         7: {
+            "speaker" : "",
             "message": "Your old life is no longer, and a life full of adventure, riches and fame awaits you as the hero of this world!",
             "speed": 1.75,
             "type": 1,
             "next": "I8",
-            "events": [],
             "delay" : 1,
         },
 
         8: {
-            "message": "???: Brave hero, we require your immense strength to defeat the demon lord, Mr. Demon Lord!!!",
+            "speaker" : "???",
+            "message": "Brave hero, we require your immense strength to defeat the demon lord, Mr. Demon Lord!!!",
             "speed": 1.3,
             "type": 1,
             "next": "I99",
-            "events": [],
             "delay" : 1,
         },
 
         9: {
-            "message": "???: Brave hero, we require your immense strength to defeat the demon lord, Mr. Demon Lord!!!",
+            "speaker" : "???",
+            "message": "Brave hero, we require your immense strength to defeat the demon lord, Mr. Demon Lord!!!",
             "speed": 1.3,
             "type": 1,
             "next": "I99",
-            "events": [],
             "delay": 1,
         },
 
         99: {
+            "speaker" : "",
             "message": "test",
             "speed": 1,
             "type": 1,
             "next": -1,
-            "events": [],
             "delay" : 1,
         },
 
@@ -401,11 +402,18 @@ def storymanager(scenecode):
 
     if story[scene_dir][scene_number]["type"] == 1:
 
-        animatetxt((story[scene_dir][scene_number]["message"]), (story[scene_dir][scene_number]["speed"]))
+        #print("Last Speaker: ", story["info"]["lastSpeaker"])
+        #print("Current Speaker: ", story[scene_dir][scene_number]["speaker"])
 
-        if story[scene_dir][scene_number]["events"] != "":
-            print(story[scene_dir][scene_number]["events"])
-            print("EVENT DETECTED")
+        if story["info"]["lastSpeaker"] != story[scene_dir][scene_number]["speaker"]:
+            print()
+
+        elif story["info"]["lastSpeaker"] != "":
+            print(story[scene_dir][scene_number]["speaker"] + ": ", end= "")
+
+        story["info"]["lastSpeaker"] = story[scene_dir][scene_number]["speaker"]
+
+        animatetxt((story[scene_dir][scene_number]["message"]), (story[scene_dir][scene_number]["speed"]))
 
         if (story[scene_dir][scene_number]["next"]) != -1:
             wait(story[scene_dir][scene_number]["delay"])
@@ -506,6 +514,7 @@ elif plr["name"].upper() == "TEST":
     plr["level"] = 0
     plr["xp"] = 0
     plr["nextxp"] = 100
+    plr["skillpoints"] = 100
 
     specialStory = True
 
@@ -594,20 +603,21 @@ def battle(enemy):
                         print()
 
             elif choice == "SKILL" or choice == "3":
+
                 if len(plr["skills"]) > 0:
                     print("""
                     Choose Skill
                     [BACK] to exit
                     """)
-                    count = 1
+                    count = 0
                     for skill in plr["skills"]:
-                        print(str(count) + ":", "SKILL NAME:", "<" + skill + ">")
                         count += 1
+                        print(str(count) + ":", "SKILL NAME:", "<" + skill + ">")
 
-                    chosenskill = input("Choose your Upgrade: ")
+                    chosenskill = input("Enter Skill Number/Name: ")
 
                     while chosenskill == "":
-                        chosenskill = input("Choose your Upgrade: ")
+                        chosenskill = input("Enter Skill Number/Name: ")
 
                     chosenskill = chosenskill.upper()
 
@@ -615,10 +625,22 @@ def battle(enemy):
                         action()
 
                     if chosenskill.isdigit():
-                        chosenupgrade = int(chosenskill)
+                        chosenskill = int(chosenskill)
+
+                        if chosenskill > count or chosenskill <= 0:
+                            print("Invalid Entry!!")
+                            action()
+
+                    for skillEntry in plr["skills"]:
+                        current_skill = 0
+                        if skillEntry.upper() == chosenskill or current_skill + 1 == chosenskill:
+                            print("SKILL FOUND!!", skillEntry)
+                            current_skill += 1
+
 
                 else:
                     print("No Skills!!")
+                    action()
 
             elif choice == "UPGRADE" or choice == "6":
                 print("""
@@ -707,6 +729,7 @@ def battle(enemy):
             if (plr["mana"] + 10) <= 100: plr["mana"] += 10
             print("Current Mana:", plr["mana"], "/", plr["maxmana"])
             print("Current HP:", plr["hp"], "/", plr["maxhp"])
+            print("Enemy HP:", currentenemy["hp"], "/", currentenemy["maxhp"])
             nextaction = input("Choose your action [ ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
             print()
             while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "SKILL" and nextaction.upper() != "ITEM" and nextaction.upper() != "RUN" and nextaction.upper() != "UPGRADE" and nextaction != "1" and nextaction != "2" and nextaction != "3" and nextaction != "4" and nextaction != "5" and nextaction != "6":
@@ -723,14 +746,14 @@ def battle(enemy):
             miss_chance = 0
 
             if target == "plr":
-                crit_chance = currentenemy["crit_chance"]
+                crit_chance = currentenemy["critChance"]
             elif target == "enemy":
-                crit_chance = plr["crit_chance"]
+                crit_chance = plr["critChance"]
 
             if target == "plr":
-                crit_chance = currentenemy["miss_chance"]
+                crit_chance = currentenemy["missChance"]
             elif target == "enemy":
-                crit_chance = plr["miss_chance"]
+                crit_chance = plr["missChance"]
 
             if chance <= crit_chance:
                 damage = damage*(random.randint(2,3))
