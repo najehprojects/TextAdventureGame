@@ -123,7 +123,7 @@ story = {
 
         9: {
             "speaker" : "???",
-            "message": "Brave hero, we require your immense strength to defeat the demon lord, Mr. Demon Lord!!!",
+            "message": "First, we must require you to face some enemies to awaken your skills...",
             "speed": 1.3,
             "type": 1,
             "next": "I99",
@@ -373,9 +373,6 @@ def animatetxt(msg, spd):
 
 def storymanager(scenecode):
 
-    def event(newevent):
-        print(newevent)
-
     scenecode = str(scenecode)
 
     scene_dir = ""
@@ -396,22 +393,19 @@ def storymanager(scenecode):
     elif letter == "P":
         scene_dir = "perfect"
 
-    scene_number = int(scenecode[1:len(scenecode)])
+    scene_number: int = int(scenecode[1:len(scenecode)])
     #print("Scene directory:", scene_dir)
     #print("Scene number:", scene_number)
 
+    if story["info"]["lastSpeaker"] != story[scene_dir][scene_number]["speaker"]:
+        print()
+
+    elif story["info"]["lastSpeaker"] != "":
+        print(story[scene_dir][scene_number]["speaker"] + ": ", end="")
+
+    story["info"]["lastSpeaker"] = story[scene_dir][scene_number]["speaker"]
+
     if story[scene_dir][scene_number]["type"] == 1:
-
-        #print("Last Speaker: ", story["info"]["lastSpeaker"])
-        #print("Current Speaker: ", story[scene_dir][scene_number]["speaker"])
-
-        if story["info"]["lastSpeaker"] != story[scene_dir][scene_number]["speaker"]:
-            print()
-
-        elif story["info"]["lastSpeaker"] != "":
-            print(story[scene_dir][scene_number]["speaker"] + ": ", end= "")
-
-        story["info"]["lastSpeaker"] = story[scene_dir][scene_number]["speaker"]
 
         animatetxt((story[scene_dir][scene_number]["message"]), (story[scene_dir][scene_number]["speed"]))
 
@@ -475,6 +469,7 @@ if plr["name"].upper() == "ZERI":
     plr["weapon"] = "Strong ahh stick"
 
     specialStory = True
+
 elif plr["name"].upper() == "HERO":
     animatetxt("So you've chosen this path...", 0.9)
     plr["hp"] = 2
@@ -490,6 +485,7 @@ elif plr["name"].upper() == "HERO":
     enemyTemplates["finalboss"]["atk"] = 75
 
     specialStory = True
+
 elif plr["name"].upper() == "CLOVII":
     animatetxt("Goodluck... :)", 0.9)
     plr["hp"] = 5
@@ -509,6 +505,7 @@ elif plr["name"].upper() == "CLOVII":
     enemyTemplates["finalboss"]["titles"] = ["Full Power Zeri"]
 
     specialStory = True
+
 elif plr["name"].upper() == "TEST":
     plr["dif"] = "NORMAL"
     plr["level"] = 0
@@ -563,8 +560,8 @@ if not specialStory:
         plr["def"] += 5
 
     elif plr["dif"] == "HARD":
-        plr["maxhp"] -= 25
-        plr["hp"] -= 25
+        plr["maxhp"] -= 20
+        plr["hp"] -= 20
 
     elif plr["dif"] == "IMPOSSIBLE":
         plr["maxhp"] -= 25
