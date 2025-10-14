@@ -10,7 +10,6 @@ def wait(secs):
 
 def clear():
     wait(1)
-    #print('Clear')
     os.system("cls")
 
 # type 1 is character speech / narration
@@ -68,7 +67,7 @@ story = {
         },
 
         3: {
-            "message": "The surroundings around you become clear, and a cathedral comes into view. Many onlookers observe your every move, with tired yet hopeful faces",
+            "message": "The surroundings around you become clear, and a cathedral comes into view.",
             "speed": 1.75,
             "type": 1,
             "next": "I4",
@@ -77,17 +76,17 @@ story = {
         },
 
         4: {
-            "message": "???: You have been chosen to save our world!",
-            "speed": 1.3,
+            "message": "Many onlookers observe your every move, with tired yet hopeful faces",
+            "speed": 1.75,
             "type": 1,
             "next": "I5",
             "events": [],
-            "delay" : 1,
+            "delay": 1,
         },
 
         5: {
-            "message": "You've been isekai'd! Chosen as a legendary hero!!",
-            "speed": 2,
+            "message": "???: You have been chosen to save our world!",
+            "speed": 1.3,
             "type": 1,
             "next": "I6",
             "events": [],
@@ -95,8 +94,8 @@ story = {
         },
 
         6: {
-            "message": "Your old life is no longer, and a life full of adventure, riches and fame awaits you as the hero of this world!",
-            "speed": 1.75,
+            "message": "You've been isekai'd! Chosen as a legendary hero!!",
+            "speed": 2,
             "type": 1,
             "next": "I7",
             "events": [],
@@ -104,12 +103,30 @@ story = {
         },
 
         7: {
+            "message": "Your old life is no longer, and a life full of adventure, riches and fame awaits you as the hero of this world!",
+            "speed": 1.75,
+            "type": 1,
+            "next": "I8",
+            "events": [],
+            "delay" : 1,
+        },
+
+        8: {
             "message": "???: Brave hero, we require your immense strength to defeat the demon lord, Mr. Demon Lord!!!",
             "speed": 1.3,
             "type": 1,
             "next": "I99",
             "events": [],
             "delay" : 1,
+        },
+
+        9: {
+            "message": "???: Brave hero, we require your immense strength to defeat the demon lord, Mr. Demon Lord!!!",
+            "speed": 1.3,
+            "type": 1,
+            "next": "I99",
+            "events": [],
+            "delay": 1,
         },
 
         99: {
@@ -268,18 +285,6 @@ plr = {
 
 enemyTemplates = {
 
-    "tutorial" : {
-        "titles" : ["Training Dummy"],
-        "atk" : 1,
-        "def" : 0,
-        "hp" : 100,
-        "critChance": 12,
-        "missChance": 5,
-        "xp" : "tutorial",
-        "name" : "",
-        "battletext" : [],
-    },
-
     "low" : {
         "titles" : ["Goblin", "Green Slime", "Skeleton", "Rotten Zombie", "Wolf"],
         "atk": 1,
@@ -372,45 +377,45 @@ def storymanager(scenecode):
 
     scenecode = str(scenecode)
 
-    sceneDIR = ""
-    sceneNUMBER = 0
+    scene_dir = ""
+    scene_number = 0
 
     letter = scenecode[0]
 
     if letter == "I":
-        sceneDIR = "intro"
+        scene_dir = "intro"
     elif letter == "W":
-        sceneDIR = "worst"
+        scene_dir = "worst"
     elif letter == "B":
-        sceneDIR = "bad"
+        scene_dir = "bad"
     elif letter == "O":
-        sceneDIR = "ok"
+        scene_dir = "ok"
     elif letter == "G":
-        sceneDIR = "good"
+        scene_dir = "good"
     elif letter == "P":
-        sceneDIR = "perfect"
+        scene_dir = "perfect"
 
-    sceneNUMBER = int(scenecode[1:len(scenecode)])
-    #print("Scene directory:", sceneDIR)
-    #print("Scene number:", sceneNUMBER)
+    scene_number = int(scenecode[1:len(scenecode)])
+    #print("Scene directory:", scene_dir)
+    #print("Scene number:", scene_number)
 
-    if story[sceneDIR][sceneNUMBER]["type"] == 1:
+    if story[scene_dir][scene_number]["type"] == 1:
 
-        animatetxt((story[sceneDIR][sceneNUMBER]["message"]), (story[sceneDIR][sceneNUMBER]["speed"]))
+        animatetxt((story[scene_dir][scene_number]["message"]), (story[scene_dir][scene_number]["speed"]))
 
-        if story[sceneDIR][sceneNUMBER]["events"] != "":
-            print(story[sceneDIR][sceneNUMBER]["events"])
+        if story[scene_dir][scene_number]["events"] != "":
+            print(story[scene_dir][scene_number]["events"])
             print("EVENT DETECTED")
 
-        if (story[sceneDIR][sceneNUMBER]["next"]) != -1:
-            wait(story[sceneDIR][sceneNUMBER]["delay"])
-            storymanager(str(story[sceneDIR][sceneNUMBER]["next"]))
+        if (story[scene_dir][scene_number]["next"]) != -1:
+            wait(story[scene_dir][scene_number]["delay"])
+            storymanager(str(story[scene_dir][scene_number]["next"]))
 
-    elif story[sceneDIR][sceneNUMBER]["type"] == 2:
+    elif story[scene_dir][scene_number]["type"] == 2:
 
-        animatetxt((story[sceneDIR][sceneNUMBER]["message"]), (story[sceneDIR][sceneNUMBER]["speed"]))
+        animatetxt((story[scene_dir][scene_number]["message"]), (story[scene_dir][scene_number]["speed"]))
         print("CHOOSE")
-        options = story[sceneDIR][sceneNUMBER]["options"]
+        options = story[scene_dir][scene_number]["options"]
         counter = 0
         for option in options:
             counter += 1
@@ -421,7 +426,7 @@ def storymanager(scenecode):
         while not choice <= counter or choice < 1:
             choice = int(input("Choice: "))
 
-        storymanager(str(story[sceneDIR][sceneNUMBER]["results"][choice-1]))
+        storymanager(str(story[scene_dir][scene_number]["results"][choice-1]))
 
 animatetxt("Welcome to...",1)
 print()
@@ -508,8 +513,6 @@ elif plr["name"].upper() == "TEST":
 
 showstats()
 
-wait(1)
-
 def difficulty_select():
 
     print("Choose Your Difficulty")
@@ -558,12 +561,6 @@ if not specialStory:
         plr["maxhp"] -= 25
         plr["hp"] -= 25
 
-doTut = input("Would you like to play the tutorial? [Y/N]: ")
-while doTut.upper() != "Y" and doTut.upper() != "N":
-    doTut = input("Would you like to play the tutorial? [Y/N]: ")
-
-tutorialComplete = False
-
 def battle(enemy):
 
     clear()
@@ -572,11 +569,6 @@ def battle(enemy):
 
     currentenemy = copy.deepcopy(enemyTemplates[enemy.lower()])
     currentenemy["name"] = enemyTemplates[enemy.lower()]["titles"][(random.randint(1, len(enemyTemplates[enemy.lower()]["titles"]))) - 1]
-
-    if enemy.lower() == "tutorial":
-        while not tutorialComplete:
-            print("Welcome to the Tutorial!")
-            break
 
     while plr["hp"] > 0 and currentenemy["hp"] > 0:
 
@@ -603,19 +595,28 @@ def battle(enemy):
 
             elif choice == "SKILL" or choice == "3":
                 if len(plr["skills"]) > 0:
-                    print()
-                    print("Choose Your Skill")
+                    print("""
+                    Choose Skill
+                    [BACK] to exit
+                    """)
                     count = 1
                     for skill in plr["skills"]:
                         print(str(count) + ":", "SKILL NAME:", "<" + skill + ">")
                         count += 1
 
-                    chosenupgrade = input("Choose your Upgrade: ")
+                    chosenskill = input("Choose your Upgrade: ")
 
-                    found = False
+                    while chosenskill == "":
+                        chosenskill = input("Choose your Upgrade: ")
 
-                    if chosenupgrade.isdigit():
-                        chosenupgrade = int(chosenupgrade)
+                    chosenskill = chosenskill.upper()
+
+                    if chosenskill == "BACK":
+                        action()
+
+                    if chosenskill.isdigit():
+                        chosenupgrade = int(chosenskill)
+
                 else:
                     print("No Skills!!")
 
@@ -656,7 +657,7 @@ def battle(enemy):
                             print(bought)
                             break
                         else:
-                            if skillShop["skills"][skillEntry]["obtained"] == True:
+                            if skillShop["skills"][skillEntry]["obtained"]:
                                 print("You already have it somehow???")
                             if plr["skillpoints"] < skillShop["skills"][skillEntry]["spcost"]:
                                 print("BROKE BOI")
@@ -691,6 +692,9 @@ def battle(enemy):
 
             nextaction = 0
 
+            if nextaction != 0:
+                nextaction = 0
+
             wait(3)
             clear()
 
@@ -715,24 +719,24 @@ def battle(enemy):
 
             chance = random.randint(1,100)
 
-            critChance = 0
-            missChance = 0
+            crit_chance = 0
+            miss_chance = 0
 
             if target == "plr":
-                critChance = currentenemy["critChance"]
+                crit_chance = currentenemy["crit_chance"]
             elif target == "enemy":
-                critChance = plr["critChance"]
+                crit_chance = plr["crit_chance"]
 
             if target == "plr":
-                critChance = currentenemy["missChance"]
+                crit_chance = currentenemy["miss_chance"]
             elif target == "enemy":
-                critChance = plr["missChance"]
+                crit_chance = plr["miss_chance"]
 
-            if chance <= critChance:
+            if chance <= crit_chance:
                 damage = damage*(random.randint(2,3))
                 print("Critical attack!")
 
-            if chance >= (100-missChance):
+            if chance >= (100-miss_chance):
                 damage = 0
                 print("Miss!")
 
@@ -825,14 +829,6 @@ def battle(enemy):
 
         turn += 1
 
-#print("Battle System Tests")
-
-if doTut.upper() == "Y":
-    print("Proper Tutorial not yet implemented")
-    #battle("Tutorial")
-
-wait(1)
-
 clear()
 
 wait(1)
@@ -840,8 +836,6 @@ wait(1)
 if not specialStory:
 
     storymanager("I1")
-
-    animatetxt("ABCDEF BATTLE TEST", 1)
 
     battle("Low")
     battle("Mid")
