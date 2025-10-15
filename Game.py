@@ -175,7 +175,7 @@ story = {
 
         99: {
             "speaker" : "",
-            "message": "test",
+            "message": "",
             "speed": 1,
             "type": 1,
             "next": -1,
@@ -455,7 +455,7 @@ def storymanager(scenecode):
         story["info"]["lastScene"] = scenecode
 
     if story[scene_dir][scene_number]["type"] == 1:
-
+ 
         animatetxt((story[scene_dir][scene_number]["message"]), (story[scene_dir][scene_number]["speed"]))
 
         if (story[scene_dir][scene_number]["next"]) != -1:
