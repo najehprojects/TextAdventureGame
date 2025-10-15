@@ -28,23 +28,28 @@ story = {
 
     "info" : {
         "lastSpeaker": "???",
+        "lastScene": "I1",
     },
 
     "templates" : {
         1: {
+            "speaker" : "???",
             "message": "test",
             "speed": 1,
             "type": 1,
             "next": "I2",
+            "delay": 1,
         },
 
         2: {
+            "speaker" : "???",
             "message": "choose",
             "speed": 1,
             "type": 2,
 
             "options": ["A", "B"],
             "results": ["I3", "I4"],
+            "delay": 1,
         },
     },
 
@@ -117,13 +122,51 @@ story = {
             "message": "Brave hero, we require your immense strength to defeat the demon lord, Mr. Demon Lord!!!",
             "speed": 1.3,
             "type": 1,
-            "next": "I99",
+            "next": "I9",
             "delay" : 1,
         },
 
         9: {
             "speaker" : "???",
             "message": "First, we must require you to face some enemies to awaken your skills...",
+            "speed": 1.3,
+            "type": 1,
+            "next": "I10",
+            "delay": 1,
+        },
+
+        10: {
+            "speaker" : "",
+            "message": "With the glint in the priest in front of you's eyes', you feel like this might be a good time to escape...",
+            "speed": 1,
+            "type": 2,
+
+            "options": ["Stay and face their training", "Try to flee"],
+            "results": ["I12", "I11"],
+            "delay": 1,
+        },
+
+        11: {
+            "speaker": "",
+            "message": "You scutter out of the cathedral, and the test section ends",
+            "speed": 1.3,
+            "type": 1,
+            "next": "I99",
+            "delay": 1,
+        },
+
+        12: {
+            "speaker": "",
+            "message": "You stay sat down, like an idiot and a malicious grins shines across the priest's face",
+            "speed": 1.3,
+            "type": 1,
+            "next": "I13",
+            "delay": 1,
+        },
+
+        13: {
+            "speaker": "???",
+            "message": "DEMON LORD, SUMMON!!!",
             "speed": 1.3,
             "type": 1,
             "next": "I99",
@@ -290,7 +333,8 @@ enemyTemplates = {
         "titles" : ["Goblin", "Green Slime", "Skeleton", "Rotten Zombie", "Wolf"],
         "atk": 1,
         "def": 1,
-        "hp": 6,
+        "hp": 12,
+        "maxhp": 12,
         "critChance": 12,
         "missChance": 5,
         "xp" : "low",
@@ -303,6 +347,7 @@ enemyTemplates = {
         "atk": 7,
         "def": 5,
         "hp": 41,
+        "maxhp": 41,
         "critChance": 12,
         "missChance": 5,
         "xp" : "mid",
@@ -315,8 +360,9 @@ enemyTemplates = {
         "atk": 15,
         "def": 7,
         "hp": 85,
-        "critChance": 12,
-        "missChance": 5,
+        "maxhp": 85,
+        "critChance": 10,
+        "missChance": 7,
         "xp" : "high",
         "name" : "",
         "battletext" : [],
@@ -327,6 +373,7 @@ enemyTemplates = {
         "atk": 24,
         "def": 12,
         "hp": 150,
+        "maxhp" : 150,
         "critChance": 12,
         "missChance": 5,
         "xp" : "miniboss",
@@ -339,8 +386,9 @@ enemyTemplates = {
         "atk": 50,
         "def": 50,
         "hp": 350,
+        "maxhp" : 350,
         "critChance": 12,
-        "missChance": 5,
+        "missChance": 2,
         "xp" : "finalboss",
         "name" : "",
         "battletext" : [],
@@ -394,16 +442,17 @@ def storymanager(scenecode):
         scene_dir = "perfect"
 
     scene_number: int = int(scenecode[1:len(scenecode)])
-    #print("Scene directory:", scene_dir)
-    #print("Scene number:", scene_number)
 
     if story["info"]["lastSpeaker"] != story[scene_dir][scene_number]["speaker"]:
         print()
 
-    elif story["info"]["lastSpeaker"] != "":
+    if story[scene_dir][scene_number]["speaker"] != "":
         print(story[scene_dir][scene_number]["speaker"] + ": ", end="")
 
     story["info"]["lastSpeaker"] = story[scene_dir][scene_number]["speaker"]
+
+    if story[scene_dir][scene_number]["type"] == 1 and story[scene_dir][scene_number]["next"] != -1:
+        story["info"]["lastScene"] = scenecode
 
     if story[scene_dir][scene_number]["type"] == 1:
 
@@ -573,6 +622,12 @@ def battle(enemy):
 
     turn = 1
 
+    def defence_calc(attacker_attack_stat,target_defence_stat):
+        if target_defence_stat >= attacker_attack_stat:
+            return attacker_attack_stat/2
+        else:
+            return attacker_attack_stat*(1-((target_defence_stat/attacker_attack_stat)/2))
+
     currentenemy = copy.deepcopy(enemyTemplates[enemy.lower()])
     currentenemy["name"] = enemyTemplates[enemy.lower()]["titles"][(random.randint(1, len(enemyTemplates[enemy.lower()]["titles"]))) - 1]
 
@@ -588,16 +643,10 @@ def battle(enemy):
                     wait(1)
                     print()
                 if cpuchoice == 2:
-                    if math.ceil(plr["atk"] - currentenemy["def"]) >= 0:
-                        attack("enemy", math.ceil(plr["atk"] - currentenemy["def"]), 0)
-                        print(currentenemy["name"], "defended! DMG DOWN")
-                        wait(1)
-                        print()
-                    else:
-                        attack("enemy", 1,0)
-                        print(currentenemy["name"], "defended! DMG DOWN")
-                        wait(1)
-                        print()
+                    print(currentenemy["name"], "defended! DMG DOWN")
+                    attack("enemy", math.ceil(defence_calc(plr["atk"], currentenemy["def"])), 0)
+                    wait(1)
+                    print()
 
             elif choice == "SKILL" or choice == "3":
 
@@ -692,16 +741,10 @@ def battle(enemy):
                         wait(1)
                         print()
                     if choice == "DEF" or choice == "2":
-                        if math.ceil(currentenemy["atk"] - plr["def"]) >= 0:
-                            print("You defended! DMG TAKEN DOWN")
-                            attack("plr", math.ceil(currentenemy["atk"] - plr["def"]), 0)
-                            wait(1)
-                            print()
-                        else:
-                            print("You defended! DMG TAKEN DOWN")
-                            attack("plr", 1, 0)
-                            wait(1)
-                            print()
+                        print("You defended! DMG TAKEN DOWN")
+                        attack("plr", math.ceil(defence_calc(currentenemy["atk"], plr["def"])), 0)
+                        wait(1)
+                        print()
 
             if choice == "2" and cpuchoice == 2 or choice == "DEF" and cpuchoice == 2:
                 print("Both Parties Defended! No Damage was taken or dealt!")
@@ -824,9 +867,9 @@ def battle(enemy):
                     print("LEVEL UP!")
                     print("<"+str(oldlevel)+">", "-->", "<"+str(plr["level"])+">")
 
-                    plr["maxhp"] += (10 * (plr["level"] - oldlevel))
-                    plr["maxmana"] += (10 * (plr["level"] - oldlevel))
-                    plr["atk"] += (5 * (plr["level"] - oldlevel))
+                    plr["maxhp"] += (2 * (plr["level"] - oldlevel))
+                    plr["maxmana"] += (3 * (plr["level"] - oldlevel))
+                    plr["atk"] += (2 * (plr["level"] - oldlevel))
 
                     if plr["def"] + (plr["level"] - oldlevel) <= 99:
                         plr["def"] += (plr["level"] - oldlevel)
@@ -857,12 +900,16 @@ if not specialStory:
 
     storymanager("I1")
 
-    battle("Low")
-    battle("Mid")
-    battle("High")
-    battle("Miniboss")
-    battle("Low")
-    battle("Finalboss")
+    if story["info"]["lastScene"] == "I13":
+        animatetxt("YOU ARE SO COOKED", 0.7)
+        battle("Finalboss")
+    else:
+        battle("Low")
+        battle("Mid")
+        battle("High")
+        battle("Miniboss")
+        battle("Low")
+        battle("Finalboss")
 
 elif plr["name"].upper() == "CLOVII":
     animatetxt("Just because I added a story to the base game doesn't mean that you get to do whatever you want now!", 2)
