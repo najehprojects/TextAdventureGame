@@ -6,7 +6,7 @@ import random
 import copy
 
 def wait(secs):
-   time.sleep(secs)
+    time.sleep(secs/global_speed)
 
 def clear():
     wait(1)
@@ -24,16 +24,18 @@ def clear():
 # P[] is Perfect Ending route
 # S[] is Secret Ending
 
+global_speed = 11 # I want to be able to up the speed for testing
+
 story = {
 
-    "info" : {
+    "info": {
         "lastSpeaker": "???",
         "lastScene": "I1",
     },
 
-    "templates" : {
+    "templates": {
         1: {
-            "speaker" : "???",
+            "speaker": "???",
             "message": "test",
             "speed": 1,
             "type": 1,
@@ -42,7 +44,7 @@ story = {
         },
 
         2: {
-            "speaker" : "???",
+            "speaker": "???",
             "message": "choose",
             "speed": 1,
             "type": 2,
@@ -53,37 +55,37 @@ story = {
         },
     },
 
-    "intro" : {
-        1 : {
-            "speaker" : "???",
-            "message" : "Awaken now, hero!",
-            "speed" : 1.3,
-            "type" : 1,
-            "next" : "I2",
-            "delay" : 1,
+    "intro": {
+        1: {
+            "speaker": "???",
+            "message": "Awaken now, hero!",
+            "speed": 1.3,
+            "type": 1,
+            "next": "I2",
+            "delay": 1,
         },
 
-        2 : {
-            "speaker" : "",
-            "message" : "As you open your eyes, soft warm light fills them.",
-            "speed" : 1.75,
-            "type" : 1,
-            "next" : "I3",
-            "delay" : 1,
+        2: {
+            "speaker": "",
+            "message": "As you open your eyes, warm light floods them softly.",
+            "speed": 1.75,
+            "type": 1,
+            "next": "I3",
+            "delay": 1,
         },
 
         3: {
-            "speaker" : "",
-            "message": "The surroundings around you become clear, and a cathedral comes into view.",
+            "speaker": "",
+            "message": "The surroundings around you become clear, and a cathedral comes into view. A priest carrying the voice you heard stands close to where you are sat on the floor.",
             "speed": 1.75,
             "type": 1,
             "next": "I4",
-            "delay" : 1,
+            "delay": 1,
         },
 
         4: {
-            "speaker" : "",
-            "message": "Many onlookers observe your every move, with tired yet hopeful faces",
+            "speaker": "",
+            "message": "Many onlookers observe your every move, with tired yet hopeful faces.",
             "speed": 1.75,
             "type": 1,
             "next": "I5",
@@ -91,43 +93,43 @@ story = {
         },
 
         5: {
-            "speaker" : "???",
+            "speaker": "Mysterious Priest",
             "message": "You have been chosen to save our world!",
             "speed": 1.3,
             "type": 1,
             "next": "I6",
-            "delay" : 1,
+            "delay": 1,
         },
 
         6: {
-            "speaker" : "",
+            "speaker": "",
             "message": "You've been isekai'd! Chosen as a legendary hero!!",
             "speed": 2,
             "type": 1,
             "next": "I7",
-            "delay" : 1,
+            "delay": 1,
         },
 
         7: {
-            "speaker" : "",
+            "speaker": "",
             "message": "Your old life is no longer, and a life full of adventure, riches and fame awaits you as the hero of this world!",
             "speed": 1.75,
             "type": 1,
             "next": "I8",
-            "delay" : 1,
+            "delay": 1,
         },
 
         8: {
-            "speaker" : "???",
+            "speaker": "Mysterious Priest",
             "message": "Brave hero, we require your immense strength to defeat the demon lord, Mr. Demon Lord!!!",
             "speed": 1.3,
             "type": 1,
             "next": "I9",
-            "delay" : 1,
+            "delay": 1,
         },
 
         9: {
-            "speaker" : "???",
+            "speaker": "Mysterious Priest",
             "message": "First, we must require you to face some enemies to awaken your skills...",
             "speed": 1.3,
             "type": 1,
@@ -136,28 +138,28 @@ story = {
         },
 
         10: {
-            "speaker" : "",
-            "message": "With the glint in the priest in front of you's eyes', you feel like this might be a good time to escape...",
+            "speaker": "",
+            "message": "Something is off, and you feel like this might be a good time to escape...",
             "speed": 1,
             "type": 2,
 
             "options": ["Stay and face their training", "Try to flee"],
-            "results": ["I12", "I11"],
+            "results": ["I96", "I11"],
             "delay": 1,
         },
 
         11: {
             "speaker": "",
-            "message": "You scutter out of the cathedral, and the test section ends",
+            "message": "You scutter out of the cathedral, and suddenly the town outside peels away like a veil.",
             "speed": 1.3,
             "type": 1,
-            "next": "I99",
+            "next": "I12",
             "delay": 1,
         },
 
         12: {
             "speaker": "",
-            "message": "You stay sat down, like an idiot and a malicious grins shines across the priest's face",
+            "message": "What remains are the ruins of a town, coated in thick a malicious purple mist.",
             "speed": 1.3,
             "type": 1,
             "next": "I13",
@@ -165,8 +167,44 @@ story = {
         },
 
         13: {
-            "speaker": "???",
-            "message": "DEMON LORD, SUMMON!!!",
+            "speaker": "",
+            "message": "It seems that leaving was the right option.",
+            "speed": 1.3,
+            "type": 1,
+            "next": "I14",
+            "delay": 1,
+        },
+
+        14: {
+            "speaker": "",
+            "message": "Suddenly, something emerges from the rubble of the cathedral you just escaped, it seems you aren't alone, and whatever was with you was strong enough to cast such a large illusion.",
+            "speed": 1.3,
+            "type": 1,
+            "next": "I99",
+            "delay": 1,
+        },
+
+        96: {
+            "speaker": "",
+            "message": "You stay sat down, and a malicious grins shines across the priest's face",
+            "speed": 1.3,
+            "type": 1,
+            "next": "I97",
+            "delay": 1,
+        },
+
+        97: {
+            "speaker": "Mysterious Priest?",
+            "message": "Courageous lord, consume the strength of this 'hero' and reinstate yourself as the emperor of this world!!",
+            "speed": 1.3,
+            "type": 1,
+            "next": "I98",
+            "delay": 1,
+        },
+
+        98: {
+            "speaker": "Mysterious Priest?!",
+            "message": "DEMON LORD: SUMMON!!!",
             "speed": 1.3,
             "type": 1,
             "next": "I99",
@@ -174,12 +212,126 @@ story = {
         },
 
         99: {
-            "speaker" : "",
+            "speaker": "",
             "message": "",
             "speed": 1,
             "type": 1,
             "next": -1,
-            "delay" : 1,
+            "delay": 1,
+        },
+
+    },
+
+    "worst": {
+
+        1: {
+            "speaker": "",
+            "message": "It seems you got lucky that it's movements were slow enough to dodge",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W2",
+            "delay": 1,
+        },
+
+        2: {
+            "speaker": "???",
+            "message": "Is it really dead?!",
+            "speed": 1.6,
+            "type": 1,
+            "next": "W3",
+            "delay": 1,
+        },
+
+        3: {
+            "speaker": "",
+            "message": "You turn around and spot a person crouched behind some rubble.",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W4",
+            "delay": 1,
+        },
+
+        4: {
+            "speaker": "",
+            "message": "Infact, on further inspection, it seems that there are many people all around, hiding in the rubble all around.",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W5",
+            "delay": 1,
+        },
+
+        5: {
+            "speaker": "Random Old Man",
+            "message": "Thank you! You're our hero!",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W6",
+            "delay": 1,
+        },
+
+        6: {
+            "speaker": "",
+            "message": "As the thanks from the real but injured townspeople roar on, a few people lurk in the rubble still.",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W7",
+            "delay": 1,
+        },
+
+        7: {
+            "speaker": "",
+            "message": "One girl with bright red hair very clearly poking from under her hood sits facing away from everyone.",
+            "speed": 1,
+            "type": 2,
+
+            "options": ["Go over and talk to her", "Leave her be"],
+            "results": ["W97", "W98"],
+            "delay": 1,
+        },
+
+        10: {
+            "speaker": "",
+            "message": "2 MONTHS LATER",
+            "speed": 0.7,
+            "type": 1,
+            "next": "W11",
+            "delay": 3,
+        },
+
+        11: {
+            "speaker": "",
+            "message": "As the thanks from the real but injured townspeople roar on, a few people lurk in the rubble still.",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W7",
+            "delay": 1,
+        },
+
+        97: {
+            "speaker": "Random Citizen",
+            "message": "Thank you so much for saving us, hero!!",
+            "speed": 1.3,
+            "type": 1,
+            "next": "I99",
+            "delay": 1,
+        },
+
+        98: {
+            "speaker": "Random Citizen",
+            "message": "Thank you so much for saving us!!",
+            "speed": 1.3,
+            "type": 1,
+            "next": "I99",
+            "delay": 1,
+        },
+
+        99: {
+            "speaker": "",
+            "message": "",
+            "speed": 1.3,
+            "type": 1,
+            "next": -1,
+            "delay": 1,
         },
 
     }
@@ -187,105 +339,105 @@ story = {
 
 skillShop = {
 
-    "skills" : {
+    "skills": {
 
-        1 : {
-            "spcost" : 3,
+        1: {
+            "spcost": 3,
             "name": "Low Heal",
             "manacost": 45,
 
             "healamount": 10,
 
-            "obtained" : False,
+            "obtained": False,
         },
 
-        2 : {
-            "spcost" : 3,
+        2: {
+            "spcost": 3,
             "name": "Slow",
             "manacost": 35,
 
-            "debufftype" : "atk",
+            "debufftype": "atk",
             "debuffamount": 5,
-            "debuffduration" : 2,
+            "debuffduration": 2,
 
-            "obtained" : False,
+            "obtained": False,
         },
 
-        3 : {
-            "spcost" : 3,
+        3: {
+            "spcost": 3,
             "name": "Slice",
             "manacost": 40,
 
-            "damage" : 25,
+            "damage": 25,
 
-            "obtained" : False,
+            "obtained": False,
         },
 
-        4 : {
+        4: {
             "spcost": 5,
-            "name" : "Heal",
+            "name": "Heal",
             "manacost": 50,
 
             "healpercentage": 25,
 
-            "obtained" : False,
+            "obtained": False,
         },
 
-        5 : {
+        5: {
             "spcost": 5,
-            "name" : "Poison",
+            "name": "Poison",
             "manacost": 50,
 
             "poisondamage": 5,
             "debufftype": "def",
             "debuffamount": 5,
-            "debuffduration" : 5,
+            "debuffduration": 5,
 
-            "obtained" : False,
+            "obtained": False,
         },
 
-        6 : {
+        6: {
             "spcost": 5,
-            "name" : "Slash",
+            "name": "Slash",
             "manacost": 50,
 
-            "damage" : 35,
+            "damage": 35,
 
-            "obtained" : False,
+            "obtained": False,
         },
 
-        7 : {
+        7: {
             "spcost": 10,
             "name": "Master Heal",
             "manacost": 75,
 
             "healpercentage": 50,
 
-            "obtained" : False,
+            "obtained": False,
         },
 
-        8 : {
+        8: {
             "spcost": 10,
             "name": "Venom",
-            "manacost" : 65,
+            "manacost": 65,
 
-            "damage" : 5,
-            "poisondamage" : 10,
-            "debufftype" : "def",
-            "debuffamount" : 10,
-            "debuffduration" : 4,
+            "damage": 5,
+            "poisondamage": 10,
+            "debufftype": "def",
+            "debuffamount": 10,
+            "debuffduration": 4,
 
-            "obtained" : False,
+            "obtained": False,
         },
 
-        9 : {
+        9: {
             "spcost": 10,
             "name": "Execute",
             "manacost": 75,
 
-            "damage" : 65,
+            "damage": 65,
 
-            "obtained" : False,
+            "obtained": False,
         },
 
     },
@@ -293,117 +445,167 @@ skillShop = {
 }
 
 plr = {
-    "name" : "",
-    "weapon" : "None",
+    "name": "",
+    "weapon": "None",
 
     "inventory": [],
 
-    "skills" : [],
+    "skills": [],
 
-    "level" : 66,
-    "xp" : 28710,
+    "level": 66,
+    "xp": 28710,
 
-    "skillpoints" : 3,
+    "skillpoints": 3,
 
-    "maxhp" : 110,
-    "maxmana" : 100,
+    "maxhp": 65,
+    "maxmana": 100,
 
-    "atk" : 20,
-    "def" : 10,
-    "hp" : 110,
+    "atk": 11,
+    "def": 5,
+    "hp": 65,
 
     "critChance": 12,
     "missChance": 5,
 
-    "mana" : 100,
+    "mana": 100,
 
-    "title" : " the Hero",
+    "title": " the Hero",
 
-    "scene": "Intro",
-    "moves" : 5,
-    "pos": 0,
-
-    "dif" : "",
+    "dif": "",
 
 }
 
 enemyTemplates = {
 
-    "low" : {
-        "titles" : ["Goblin", "Green Slime", "Skeleton", "Rotten Zombie", "Wolf"],
+    "low": {
+        "titles": ["Goblin", "Green Slime", "Skeleton", "Rotten Zombie", "Wolf"],
         "atk": 1,
         "def": 1,
         "hp": 12,
         "maxhp": 12,
         "critChance": 12,
         "missChance": 5,
-        "xp" : "low",
-        "name" : "",
-        "battletext" : [],
+        "xp": "low",
+        "name": "",
+        "battletext": "",
     },
 
-    "mid" : {
-        "titles" : ["Orc", "Blue Slime", "Armored Skeleton", "Zombie", "Wolf Pack Leader"],
+    "mid": {
+        "titles": ["Orc", "Blue Slime", "Armored Skeleton", "Zombie", "Wolf Pack Leader"],
         "atk": 7,
         "def": 5,
         "hp": 41,
         "maxhp": 41,
         "critChance": 12,
         "missChance": 5,
-        "xp" : "mid",
-        "name" : "",
-        "battletext" : [],
+        "xp": "mid",
+        "name": "",
+        "battletext": "",
+    },
+
+    "shapeshifter": {
+        "titles": ["The Shapeshifter"],
+        "atk": 20,
+        "def": 5,
+        "hp": 150,
+        "maxhp": 150,
+        "critChance": 5,
+        "missChance": 35,
+        "xp": "mid",
+        "name": "",
+        "image": """
+                    ██████                        
+       █           ▓▒▒▒▒█▓█████         █▒▓█      
+     █▓███     ████▓▓▒▓▓▒▓██▓▓▓█▓███████▒▓▓██     
+     ▓█▓▒██  █▓▓▓█▓▓▓▓▒▓▓▓█▓▓▒▓██▓▓▓██▒▓▒█████    
+      ▒▓▓██▓▒▓▓▓▓▒▒▓▓▓▓▓▓▓▓▓▒▒▓██▓█▓▒▓▓██▓▓██     
+      █▓█▓▒▓██▓▓▓▒▒▓▓▒▒▓▒▒▓▓▓▒▓██▓▓████████▓▓█    
+       █▓▒▓██▓▒▒▓▓▓█▓▓▓▓▒▒▓██▓█▓▓▒▓████████▒▓▓▒▓  
+      █▓██▓██▓▓▓█▓▓██▓▓██▓▓█▓▓▓▓▒▒▓█████  █▓▓█▓██ 
+   █▒▒▓▓█▓▓█▓▓▒▓▓▓█▓▓▓▓▓██▓▒▒▓▓▒▓▓▓█▓▓▓█▓█ ██▓████
+   ███▓█▓▓██▓▓▓▒▒▓██▒▒▓▓▓▓▓▓▒▒▒▓▓▓▓███▓██████████ 
+    █▓▒▒▓▓▓█▓▒▓▒▓█▓▓▒▒▓▓▓▓▓█▓▓▓▒▒▓█▓▓▓█▓█▓▓▓▓█    
+  █▓▒▒▓▒▒▒▓▓▓▓▓▓███▓▓▓██████▓██▓▓▓███████▓▓▓▓██   
+ █▓▒▓▒▒▒▓▒▓██▓█████▓▓███▒▓▒▒▒▓▓████████▓▓▓▓▒▓▓██  
+ █▓▓▓▓▓▓▓▓▓███▓▓▓▓▓██▓▓▓▒▓▓▓▓▓▓▓█████▓█▓█▓▓▓▓▓▓█  
+█▓▓▓▓▒▒▒▓█████▓▓▓▓▓▓▓▓▒▓███████▓▓▓▓▓▓▓██▓█▓▓▒▒▓██ 
+█▓▓▓▓▓▓▓██▓▓██▓▒▒▒▒▓▓▓████▓▓▓▓▓▓▓▓▓▓▓██▓███▓▓▓▓██ 
+█▓▓▓▓▓▓██▓██▓▓▓▓▓▓▓▓█▓██▓▓▓▓▓▓▓▒▒▓▓▓█▓█▓█▓▒▒▒▒███ 
+ █▓█████████▓▓▓▓████████▓████▓▓▓▓▓██████▓▓█▓▓▓▓██ 
+ ██▓▓▓▓███████████▓███▓▓▓▓█████████████████▓█▓▓██ 
+█████████▓███▓▓▓▓▓▓▓▓▒▒▓▒▓▓▓███████▓▓▓██▓█████████
+ █████████▓███▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓███▓▓▓▓▓▓█████ ████  
+  ████████████████▓▓▓▓▓▓██▓████▓▓▓▓▓█▓██▓██       
+    ████████████████████████████▓▓▓▓▓▓▓█▓▓▓█      
+        ████████████████████████▓▓▓▓█▓████████    
+       █████████████  ███████████▓█████████████   
+     █████████████       ███████▓▓▓▓▓▓▓▓▓█        
+       ███████████              ████████████      
+        ████ ████                ██████████       
+        """,
+        "battletext": ["The air feels murky...", "It stares.", "It's limbs sluggishly and sloppily thrash around.", "A potent malicious presence radiates from it", "You can't quite tell what it is", "It smells like something died and then died again.", "It slowly expands and contracts, but it isn't breathing."],
     },
 
     "high": {
-        "titles" : ["Orc General", "Red Slime", "Skeleton Warrior", "Mutated Zombie", "Giant"],
+        "titles": ["Orc General", "Red Slime", "Skeleton Warrior", "Mutated Zombie", "Giant"],
         "atk": 15,
         "def": 7,
-        "hp": 85,
-        "maxhp": 85,
+        "hp": 160,
+        "maxhp": 160,
         "critChance": 10,
         "missChance": 7,
-        "xp" : "high",
-        "name" : "",
-        "battletext" : [],
+        "xp": "high",
+        "name": "",
+        "battletext": "",
     },
 
     "miniboss": {
-        "titles" : ["Fenrir", "Giant Black Slime", "Ancient Giant"],
+        "titles": ["Fenrir", "Giant Black Slime", "Ancient Giant"],
         "atk": 24,
         "def": 12,
         "hp": 150,
-        "maxhp" : 150,
+        "maxhp": 150,
         "critChance": 12,
         "missChance": 5,
-        "xp" : "miniboss",
-        "name" : "",
-        "battletext" : [],
+        "xp": "miniboss",
+        "name": "",
+        "battletext": "",
     },
 
     "finalboss": {
-        "titles" : ["The Dark Lord"],
+        "titles": ["The Demon Lord"],
         "atk": 50,
         "def": 50,
         "hp": 350,
-        "maxhp" : 350,
+        "maxhp": 350,
         "critChance": 12,
-        "missChance": 2,
-        "xp" : "finalboss",
-        "name" : "",
-        "battletext" : [],
+        "missChance": 1,
+        "xp": "finalboss",
+        "name": "",
+        "battletext": ["You wonder why his name is so generic...", "Even through his face which is literally on flames, you can tell he's smiling.", "His precision is off the charts.", "You think of your days at home and wonder if being isekai'd was really a good thing."],
     },
 }
 
-def gameover():
-    print("Game Over")
+def gameover(reason):
+    clear()
+    print("GAME OVER")
+
+    if reason != "":
+        animatetxt("You were killed by " + reason, 1)
+    else:
+        print()
+
+    for i in range(1, 6):
+        print("Closing game in " + str(6 - i) + "...")
+        wait(1)
+
     exit(0)
 
 def showstats():
     print()
     print("-<{[PLAYER STATS]}>-")
     print()
-    print("["+str.upper(plr["name"])+str.upper(plr["title"])+"]")
+    print("[" + str.upper(plr["name"]) + str.upper(plr["title"]) + "]")
     print("Current Weapon:", plr["weapon"])
     print("Level:", plr["level"])
     print("XP:", plr["xp"])
@@ -413,14 +615,16 @@ def animatetxt(msg, spd):
     for chara in msg:
         sys.stdout.write(chara)
         sys.stdout.flush()
-        wait(0.1/spd)
+
+        if global_speed < 10:
+            wait(0.1 / spd/ global_speed)
+
         if chara == ",":
-            wait((0.5/spd))
+            wait((0.5 / spd))
 
     print()
 
 def storymanager(scenecode):
-
     scenecode = str(scenecode)
 
     scene_dir = ""
@@ -430,15 +634,15 @@ def storymanager(scenecode):
 
     if letter == "I":
         scene_dir = "intro"
-    elif letter == "W":
+    if letter == "W":
         scene_dir = "worst"
-    elif letter == "B":
+    if letter == "B":
         scene_dir = "bad"
-    elif letter == "O":
+    if letter == "O":
         scene_dir = "ok"
-    elif letter == "G":
+    if letter == "G":
         scene_dir = "good"
-    elif letter == "P":
+    if letter == "P":
         scene_dir = "perfect"
 
     scene_number: int = int(scenecode[1:len(scenecode)])
@@ -455,7 +659,7 @@ def storymanager(scenecode):
         story["info"]["lastScene"] = scenecode
 
     if story[scene_dir][scene_number]["type"] == 1:
- 
+
         animatetxt((story[scene_dir][scene_number]["message"]), (story[scene_dir][scene_number]["speed"]))
 
         if (story[scene_dir][scene_number]["next"]) != -1:
@@ -465,21 +669,29 @@ def storymanager(scenecode):
     elif story[scene_dir][scene_number]["type"] == 2:
 
         animatetxt((story[scene_dir][scene_number]["message"]), (story[scene_dir][scene_number]["speed"]))
+        print()
         print("CHOOSE")
         options = story[scene_dir][scene_number]["options"]
         counter = 0
         for option in options:
             counter += 1
-            print("["+str(counter)+"]", option)
+            print("[" + str(counter) + "]", option)
 
-        choice = int(input("Choice: "))
+        choice = 0
 
-        while not choice <= counter or choice < 1:
-            choice = int(input("Choice: "))
+        while not choice.is_integer() or not int(choice) <= counter or choice < 1:
 
-        storymanager(str(story[scene_dir][scene_number]["results"][choice-1]))
+            choice = input("Choice: ")
 
-animatetxt("Welcome to...",1)
+            try:
+                choice = int(choice)
+            except ValueError or choice < 1 or choice > counter or not choice.is_integer():
+                print("Invalid choice")
+                choice = 0
+
+        storymanager(str(story[scene_dir][scene_number]["results"][choice - 1]))
+
+animatetxt("Welcome to...", 1)
 print()
 animatetxt("""
  .d8888b.  888                                                  8888888     888 d8b          888         888    888                          888 
@@ -492,7 +704,8 @@ Y88b  d88P 888  888 Y88..88P Y88..88P      X88 Y8b.    d8b        888  Y88b 888 
  "Y8888P"  888  888  "Y88P"   "Y88P"   88888P'  "Y8888 88P      8888888 "Y88888 888  "Y88P"   "Y888      888    888  "Y8888  888     "Y88P"  888 
                                                        8P                                                                                        
                                                        "                                                                                         
-                                                                                                                                                 """, 500)
+                                                                                                                                                 """,
+           500)
 wait(1)
 input("Press enter to continue...")
 
@@ -505,6 +718,7 @@ while plr["name"] == "":
     plr["name"] = input("Enter a valid name: ")
 
 specialStory = False
+skipSelection = False
 
 if plr["name"].upper() == "ZERI":
     plr["maxhp"] = 99999999999999
@@ -518,22 +732,7 @@ if plr["name"].upper() == "ZERI":
     plr["weapon"] = "Strong ahh stick"
 
     specialStory = True
-
-elif plr["name"].upper() == "HERO":
-    animatetxt("So you've chosen this path...", 0.9)
-    plr["hp"] = 2
-    plr["maxhp"] = 2
-    plr["atk"] = 701
-    plr["def"] = 99
-    plr["dif"] = "NORMAL"
-    plr["title"] = ", the True Saviour"
-    plr["level"] = 999
-    plr["xp"] = 99999999999999
-    plr["weapon"] = "The Legendary Blade, Excalibur"
-
-    enemyTemplates["finalboss"]["atk"] = 75
-
-    specialStory = True
+    skipSelection = True
 
 elif plr["name"].upper() == "CLOVII":
     animatetxt("Goodluck... :)", 0.9)
@@ -554,8 +753,9 @@ elif plr["name"].upper() == "CLOVII":
     enemyTemplates["finalboss"]["titles"] = ["Full Power Zeri"]
 
     specialStory = True
+    skipSelection = True
 
-elif plr["name"].upper() == "TEST":
+elif plr["name"].upper() == "ENDLESSHERO":
     plr["dif"] = "NORMAL"
     plr["level"] = 0
     plr["xp"] = 0
@@ -563,17 +763,36 @@ elif plr["name"].upper() == "TEST":
     plr["skillpoints"] = 100
 
     specialStory = True
+    skipSelection = True
+
+    wait(3)
+
+elif plr["name"].upper() == "UNDIES" or plr["name"].upper() == "PEACE":
+
+    animatetxt("Wooden Stick Successfully enhanced to +99 reinforcement!!", 1)
+
+    plr["weapon"] = "+99 Reinforced Wooden Stick"
+    #plr["skills"] = ["Swing Up", "Swing Down", "Voracity"]
+    plr["atk"] = 9999999
+    plr["def"] = 700
+    plr["maxhp"] = 9999
+    plr["hp"] = 9999
+
+    plr["dif"] = "NORMAL"
+
+    skipSelection = True
 
     wait(3)
 
 showstats()
 
 def difficulty_select():
-
     print("Choose Your Difficulty")
     plr["dif"] = input("[Easy/Normal/Hard/Impossible] ")
 
-    while plr["dif"].upper() != "EASY" and plr["dif"].upper() != "NORMAL" and plr["dif"].upper() != "HARD" and plr["dif"].upper() != "IMPOSSIBLE" and plr["dif"].upper() != "E" and plr["dif"].upper() != "N" and plr["dif"].upper() != "H" and plr["dif"].upper() != "I":
+    while plr["dif"].upper() != "EASY" and plr["dif"].upper() != "NORMAL" and plr["dif"].upper() != "HARD" and plr[
+        "dif"].upper() != "IMPOSSIBLE" and plr["dif"].upper() != "E" and plr["dif"].upper() != "N" and plr[
+        "dif"].upper() != "H" and plr["dif"].upper() != "I":
         plr["dif"] = input("Enter a valid difficulty: ")
 
     if plr["dif"].upper() == "E":
@@ -586,16 +805,16 @@ def difficulty_select():
         plr["dif"] = "IMPOSSIBLE"
 
     plr["dif"] = plr["dif"].upper()
-    print("Selected Difficulty "+ plr["dif"])
+    print("Selected Difficulty " + plr["dif"])
 
-if not specialStory:
+if not skipSelection:
     difficulty_select()
 
-    difCon = input("Are you sure you would like to proceed with difficulty "+ plr["dif"]+"? "+ "[Y/N]: ")
+    difCon = input("Are you sure you would like to proceed with difficulty " + plr["dif"] + "? " + "[Y/N]: ")
     while difCon.upper() != "Y":
 
         while difCon.upper() != "Y" and difCon.upper() != "N":
-            difCon = input("Confirm difficulty "+ plr["dif"]+"? "+ "[Y/N]: ")
+            difCon = input("Confirm difficulty " + plr["dif"] + "? " + "[Y/N]: ")
 
         if difCon.upper() == "N":
             difficulty_select()
@@ -617,19 +836,19 @@ if not specialStory:
         plr["hp"] -= 25
 
 def battle(enemy):
-
     clear()
 
     turn = 1
 
-    def defence_calc(attacker_attack_stat,target_defence_stat):
+    def defence_calc(attacker_attack_stat, target_defence_stat):
         if target_defence_stat >= attacker_attack_stat:
-            return attacker_attack_stat/2
+            return (attacker_attack_stat / 2) - (target_defence_stat % 7)
         else:
-            return attacker_attack_stat*(1-((target_defence_stat/attacker_attack_stat)/2))
+            return attacker_attack_stat * (1 - ((target_defence_stat / attacker_attack_stat) / 2))
 
     currentenemy = copy.deepcopy(enemyTemplates[enemy.lower()])
-    currentenemy["name"] = enemyTemplates[enemy.lower()]["titles"][(random.randint(1, len(enemyTemplates[enemy.lower()]["titles"]))) - 1]
+    currentenemy["name"] = enemyTemplates[enemy.lower()]["titles"][
+        (random.randint(1, len(enemyTemplates[enemy.lower()]["titles"]))) - 1]
 
     while plr["hp"] > 0 and currentenemy["hp"] > 0:
 
@@ -696,7 +915,7 @@ def battle(enemy):
                 print("Skill Points:", plr["skillpoints"])
                 for i in skillShop["skills"]:
                     if not skillShop["skills"][i]["obtained"]:
-                        print(str(i)+":","SKILL NAME:", "<"+skillShop["skills"][i]["name"]+">")
+                        print(str(i) + ":", "SKILL NAME:", "<" + skillShop["skills"][i]["name"] + ">")
                         print("SP COST:", skillShop["skills"][i]["spcost"])
 
                 chosenupgrade = input("Choose your Upgrade: ")
@@ -716,33 +935,35 @@ def battle(enemy):
 
                 for skillEntry in skillShop["skills"]:
                     if skillShop["skills"][skillEntry]["name"].upper() == chosenupgrade or skillEntry == chosenupgrade:
-                        if plr["skillpoints"] >= skillShop["skills"][skillEntry]["spcost"] and skillShop["skills"][skillEntry]["obtained"] == False:
+                        if plr["skillpoints"] >= skillShop["skills"][skillEntry]["spcost"] and \
+                                skillShop["skills"][skillEntry]["obtained"] == False:
                             print("BOUGHT SKILL", skillShop["skills"][skillEntry]["name"])
                             plr["skillpoints"] -= skillShop["skills"][skillEntry]["spcost"]
                             plr["skills"].append(skillShop["skills"][skillEntry]["name"])
                             skillShop["skills"][skillEntry]["obtained"] = True
                             bought = True
-                            print(bought)
                             break
                         else:
                             if skillShop["skills"][skillEntry]["obtained"]:
-                                print("You already have it somehow???")
+                                print("You already have this skill!")
                             if plr["skillpoints"] < skillShop["skills"][skillEntry]["spcost"]:
-                                print("BROKE BOI")
+                                print("Not enough points!")
 
                 if not bought:
                     print("Upgrade unavailable")
-                    action()
+
+                action()
 
             if currentenemy["hp"] >= 1:
+
                 if cpuchoice == 1:
-                    if choice == "ATK" or choice == "1":
-                        attack("plr", currentenemy["atk"], 0)
-                        wait(1)
-                        print()
                     if choice == "DEF" or choice == "2":
                         print("You defended! DMG TAKEN DOWN")
                         attack("plr", math.ceil(defence_calc(currentenemy["atk"], plr["def"])), 0)
+                        wait(1)
+                        print()
+                    else:
+                        attack("plr", currentenemy["atk"], 0)
                         wait(1)
                         print()
 
@@ -769,60 +990,67 @@ def battle(enemy):
             if (plr["mana"] + 10) <= 100: plr["mana"] += 10
             print("Current Mana:", plr["mana"], "/", plr["maxmana"])
             print("Current HP:", plr["hp"], "/", plr["maxhp"])
+            print()
             print("Enemy HP:", currentenemy["hp"], "/", currentenemy["maxhp"])
-            nextaction = input("Choose your action [ ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
+
+            if currentenemy["battletext"] != "":
+                print()
+                print(currentenemy["battletext"][random.randint(1,len(currentenemy["battletext"]))-1])
+
+            print()
+            nextaction = input(
+                "Choose your action [ ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
             print()
             while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "SKILL" and nextaction.upper() != "ITEM" and nextaction.upper() != "RUN" and nextaction.upper() != "UPGRADE" and nextaction != "1" and nextaction != "2" and nextaction != "3" and nextaction != "4" and nextaction != "5" and nextaction != "6":
-                nextaction = input("Choose your action [ ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
+                nextaction = input(
+                    "Choose your action [ ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
                 print()
 
             activity(nextaction)
 
         def attack(target, damage, skilla):
 
-            chance = random.randint(1,100)
+            chance = random.randint(1, 100)
 
             crit_chance = 0
             miss_chance = 0
 
             if target == "plr":
                 crit_chance = currentenemy["critChance"]
+                miss_chance = currentenemy["missChance"]
             elif target == "enemy":
                 crit_chance = plr["critChance"]
-
-            if target == "plr":
-                crit_chance = currentenemy["missChance"]
-            elif target == "enemy":
-                crit_chance = plr["missChance"]
+                miss_chance = plr["missChance"]
 
             if chance <= crit_chance:
-                damage = damage*(random.randint(2,3))
+                damage = damage * (random.randint(2, 3))
                 print("Critical attack!")
 
-            if chance >= (100-miss_chance):
+            if chance >= (100 - miss_chance):
                 damage = 0
                 print("Miss!")
 
             if skilla == 0:
                 if target == "plr":
-                    plr["hp"] -= math.ceil(damage*(1-(plr["def"]/100)))
-                    print("You took", math.ceil(damage*(1-(plr["def"]/100))), "damage!")
+                    plr["hp"] -= math.ceil(damage)
+                    print("You took", math.ceil(damage), "damage!")
                     if plr["hp"] < 0: plr["hp"] = 0
                     print("You have", plr["hp"], "HP left!")
                     print()
                 if target == "enemy":
-                    currentenemy["hp"] -= math.ceil(damage*(1-(currentenemy["def"]/100)))
-                    print("You dealt", math.ceil(damage*(1-(currentenemy["def"]/100))), "damage!")
+                    currentenemy["hp"] -= math.ceil(damage)
+                    print("You dealt", math.ceil(damage), "damage!")
                     if currentenemy["hp"] < 0: currentenemy["hp"] = 0
                     print(currentenemy["name"], "has", currentenemy["hp"], "HP left!")
                     print()
+
             if skilla == 1:
                 print("a")
 
         action()
 
         if plr["hp"] <= 0:
-            gameover()
+            gameover(currentenemy["name"])
         elif currentenemy["hp"] <= 0:
 
             print("You win!")
@@ -849,23 +1077,23 @@ def battle(enemy):
             oldlevel = plr["level"]
 
             def levelandxp(totalxp, levels):
-                while totalxp >= 100+(10*levels):
-                    totalxp -= 100+(10*levels)
+                while totalxp >= 100 + (10 * levels):
+                    totalxp -= 100 + (10 * levels)
                     levels += 1
-                    #print("Current Level:", levels, "XP Left:", totalxp)
+                    # print("Current Level:", levels, "XP Left:", totalxp)
                 plr["level"] = levels
                 return totalxp
 
             if oldlevel < 999:
 
-                plr["nextxp"] = (100+(10*plr["level"]) - levelandxp(plr["xp"], 0))
+                plr["nextxp"] = (100 + (10 * plr["level"]) - levelandxp(plr["xp"], 0))
 
                 if plr["level"] == oldlevel:
                     print("XP till next level:", plr["nextxp"])
 
                 if plr["level"] > oldlevel:
                     print("LEVEL UP!")
-                    print("<"+str(oldlevel)+">", "-->", "<"+str(plr["level"])+">")
+                    print("<" + str(oldlevel) + ">", "-->", "<" + str(plr["level"]) + ">")
 
                     plr["maxhp"] += (2 * (plr["level"] - oldlevel))
                     plr["maxmana"] += (3 * (plr["level"] - oldlevel))
@@ -900,23 +1128,47 @@ if not specialStory:
 
     storymanager("I1")
 
-    if story["info"]["lastScene"] == "I13":
-        animatetxt("YOU ARE SO COOKED", 0.7)
+    if story["info"]["lastScene"] == "I98":
+
+        clear()
+
+        animatetxt("An ominous aura spreads across the cathedral...", 0.8)
+        animatetxt("It seems the final battle is starting already", 0.6)
+
+        enemyTemplates["finalboss"]["maxhp"] = 500
+        enemyTemplates["finalboss"]["hp"] = 500
+        enemyTemplates["finalboss"]["atk"] = 100
+        enemyTemplates["finalboss"]["def"] = 99
+        enemyTemplates["finalboss"]["battletext"] = ["You wonder why his name is so generic...", "He looks bored.", "He's probably holding back.", "You're cooked.", "There's no way out of this one.", "You're done.", "You probably should've ran when you had the chance.", "You feel somewhat weak."]
         battle("Finalboss")
+        animatetxt("You did it... somehow?", 1)
+        animatetxt("What to do now?", 1)
+        clear()
+        print("""MYSTERY ENDING?
+        Beating this wasn't supposed to be possible, so you deserve a round of applause.""")
+        gameover("")
     else:
-        battle("Low")
-        battle("Mid")
-        battle("High")
-        battle("Miniboss")
-        battle("Low")
-        battle("Finalboss")
+        print(enemyTemplates["shapeshifter"]["image"])
+        animatetxt("The... thing, it moves into your path", 0.3)
+        wait(2)
+        animatetxt("You have no other choice", 0.3)
+        battle("Shapeshifter")
+        storymanager("W1")
+
+    if story["info"]["lastScene"] == "W98":
+        storymanager("W10")
+        print("<End of story>")
+    else:
+        #storymanager("O1")
+        print("<End of story>")
 
 elif plr["name"].upper() == "CLOVII":
-    animatetxt("Just because I added a story to the base game doesn't mean that you get to do whatever you want now!", 2)
+    animatetxt("Just because I added a story to the base game doesn't mean that you get to do whatever you want now!",
+               2)
     wait(3)
 
     while plr["level"] < 999:
-        newEn = random.randint(1,3)
+        newEn = random.randint(1, 3)
         if newEn == 1:
             battle("Mid")
         elif newEn == 2:
@@ -926,9 +1178,9 @@ elif plr["name"].upper() == "CLOVII":
 
     battle("Finalboss")
 
-elif plr["name"].upper() == "TEST":
+elif plr["name"].upper() == "ENDLESSHERO":
     while plr["level"] < 999:
-        newEn = random.randint(1,4)
+        newEn = random.randint(1, 4)
         if newEn == 1:
             battle("Low")
         elif newEn == 2:
