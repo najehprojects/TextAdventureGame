@@ -24,7 +24,8 @@ def clear():
 # P[] is Perfect Ending route
 # S[] is Secret Ending
 
-global_speed = 11 # I want to be able to up the speed for testing
+global_speed = 11
+# I want to be able to up the speed for testing
 
 story = {
 
@@ -253,7 +254,7 @@ story = {
 
         4: {
             "speaker": "",
-            "message": "Infact, on further inspection, it seems that there are many people all around, hiding in the rubble all around.",
+            "message": "In fact, on further inspection, it seems that there are many people all around, hiding in the rubble all around.",
             "speed": 1.3,
             "type": 1,
             "next": "W5",
@@ -339,103 +340,82 @@ story = {
 
 skillShop = {
 
+    # Type 1 is damage set amount
+    # Type 2 is damage set percentage
+
+    # Type 3 is healing set amount
+    # Type 4 is healing set percentage
+
     "skills": {
 
         1: {
             "spcost": 3,
             "name": "Low Heal",
-            "manacost": 45,
 
-            "healamount": 10,
+            "type": 3,
+
+            "manacost": 45,
+            "amount": 10,
 
             "obtained": False,
         },
 
         2: {
             "spcost": 3,
-            "name": "Slow",
-            "manacost": 35,
+            "name": "Slice",
 
-            "debufftype": "atk",
-            "debuffamount": 5,
-            "debuffduration": 2,
+            "type": 1,
+
+            "manacost": 40,
+            "amount": 30,
 
             "obtained": False,
         },
 
         3: {
-            "spcost": 3,
-            "name": "Slice",
-            "manacost": 40,
+            "spcost": 5,
+            "name": "Heal",
 
-            "damage": 25,
+            "type": 4,
+
+            "manacost": 50,
+            "amount": 15,
 
             "obtained": False,
         },
 
         4: {
             "spcost": 5,
-            "name": "Heal",
-            "manacost": 50,
+            "name": "Slash",
 
-            "healpercentage": 25,
+            "type": 2,
+
+            "manacost": 50,
+            "amount": 20,
 
             "obtained": False,
         },
 
         5: {
-            "spcost": 5,
-            "name": "Poison",
-            "manacost": 50,
+            "spcost": 10,
+            "name": "Master Heal",
 
-            "poisondamage": 5,
-            "debufftype": "def",
-            "debuffamount": 5,
-            "debuffduration": 5,
+            "type": 4,
+
+            "manacost": 150,
+            "amount": 50,
 
             "obtained": False,
         },
 
         6: {
-            "spcost": 5,
-            "name": "Slash",
-            "manacost": 50,
-
-            "damage": 35,
-
-            "obtained": False,
-        },
-
-        7: {
-            "spcost": 10,
-            "name": "Master Heal",
-            "manacost": 75,
-
-            "healpercentage": 50,
-
-            "obtained": False,
-        },
-
-        8: {
-            "spcost": 10,
-            "name": "Venom",
-            "manacost": 65,
-
-            "damage": 5,
-            "poisondamage": 10,
-            "debufftype": "def",
-            "debuffamount": 10,
-            "debuffduration": 4,
-
-            "obtained": False,
-        },
-
-        9: {
             "spcost": 10,
             "name": "Execute",
-            "manacost": 75,
 
-            "damage": 65,
+            "type": 2,
+
+            "manacost": 125,
+            "amount": 65,
 
             "obtained": False,
         },
@@ -761,6 +741,8 @@ elif plr["name"].upper() == "ENDLESSHERO":
     plr["xp"] = 0
     plr["nextxp"] = 100
     plr["skillpoints"] = 100
+    plr["maxmana"] = 1000
+    plr["mana"] = 1000
 
     specialStory = True
     skipSelection = True
@@ -842,7 +824,7 @@ def battle(enemy):
 
     def defence_calc(attacker_attack_stat, target_defence_stat):
         if target_defence_stat >= attacker_attack_stat:
-            return (attacker_attack_stat / 2) - (target_defence_stat % 7)
+            return attacker_attack_stat / 2
         else:
             return attacker_attack_stat * (1 - ((target_defence_stat / attacker_attack_stat) / 2))
 
@@ -898,10 +880,40 @@ def battle(enemy):
 
                     for skillEntry in plr["skills"]:
                         current_skill = 0
+
                         if skillEntry.upper() == chosenskill or current_skill + 1 == chosenskill:
-                            print("SKILL FOUND!!", skillEntry)
+                            #print("SKILL FOUND!!", skillEntry)
+
                             current_skill += 1
 
+                            for skill in skillShop["skills"]:
+
+                                if skillShop["skills"][skill]["name"].upper() == skillEntry.upper():
+
+                                    print()
+
+                                    if plr["mana"] >= skillShop["skills"][skill]["manacost"]:
+                                        plr["mana"] -= skillShop["skills"][skill]["manacost"]
+
+                                        if skillShop["skills"][skill]["type"] == 1:
+                                            attack("enemy", skillShop["skills"][skill]["amount"], 0)
+
+                                        elif skillShop["skills"][skill]["type"] == 2:
+                                            attack("enemy", skillShop["skills"][skill]["amount"], 1)
+
+                                        elif skillShop["skills"][skill]["type"] == 3:
+                                            plr["hp"] += math.ceil(skillShop["skills"][skill]["amount"])
+                                            print("Healed", str(math.ceil(skillShop["skills"][skill]["amount"])) + " Health!")
+
+                                        elif skillShop["skills"][skill]["type"] == 4:
+                                            plr["hp"] += math.ceil(plr["maxhp"]*(skillShop["skills"][skill]["amount"]/100))
+                                            if plr["hp"] > plr["maxhp"] and skillShop["skills"][skill]["name"].upper() != "MASTER HEAL":
+                                                plr["hp"] = plr["maxhp"]
+                                            print("Healed", str(math.ceil(plr["maxhp"]*(skillShop["skills"][skill]["amount"]/100))) + " Health!")
+
+                                    else:
+                                        print("NO MANA!")
+                                        action()
 
                 else:
                     print("No Skills!!")
@@ -1045,7 +1057,12 @@ def battle(enemy):
                     print()
 
             if skilla == 1:
-                print("a")
+                if target == "enemy":
+                    currentenemy["hp"] -= math.ceil(currentenemy["maxhp"]*(damage/100))
+                    print("You dealt", math.ceil(currentenemy["maxhp"]*(damage/100)), "damage!")
+                    if currentenemy["hp"] < 0: currentenemy["hp"] = 0
+                    print(currentenemy["name"], "has", currentenemy["hp"], "HP left!")
+                    print()
 
         action()
 
@@ -1154,6 +1171,8 @@ if not specialStory:
         animatetxt("You have no other choice", 0.3)
         battle("Shapeshifter")
         storymanager("W1")
+
+    clear()
 
     if story["info"]["lastScene"] == "W98":
         storymanager("W10")
