@@ -286,7 +286,7 @@ story = {
             "type": 2,
 
             "options": ["Go over and talk to her", "Leave her be"],
-            "results": ["W97", "W98"],
+            "results": ["O97", "W98"],
             "delay": 1,
         },
 
@@ -308,15 +308,6 @@ story = {
             "delay": 1,
         },
 
-        97: {
-            "speaker": "Random Citizen",
-            "message": "Thank you so much for saving us, hero!!",
-            "speed": 1.3,
-            "type": 1,
-            "next": "I99",
-            "delay": 1,
-        },
-
         98: {
             "speaker": "Random Citizen",
             "message": "Thank you so much for saving us!!",
@@ -335,7 +326,47 @@ story = {
             "delay": 1,
         },
 
-    }
+    },
+
+    "ok": {
+
+            1: {
+                "speaker": "",
+                "message": "You approach the little girl, and as soon as you get close, a bright purple light erupts.",
+                "speed": 1.3,
+                "type": 1,
+                "next": "O2",
+                "delay": 1,
+            },
+
+            2: {
+                "speaker": "Little Girl",
+                "message": "STAY... STAY AWAY FROM ME!!",
+                "speed": 1.3,
+                "type": 1,
+                "next": "O3",
+                "delay": 1,
+            },
+
+            3: {
+                "speaker": "",
+                "message": "A bright pillar of light engulfs the surroundings",
+                "speed": 1.3,
+                "type": 1,
+                "next": "O99",
+                "delay": 1,
+            },
+
+            99: {
+                "speaker": "",
+                "message": "",
+                "speed": 1.3,
+                "type": 1,
+                "next": -1,
+                "delay": 1,
+            },
+
+        },
 }
 
 skillShop = {
