@@ -24,7 +24,7 @@ def clear():
 # P[] is Perfect Ending route
 # S[] is Secret Ending
 
-global_speed = 1
+global_speed = 11
 # I want to be able to up the speed for testing
 
 story = {
@@ -964,10 +964,14 @@ def battle(enemy):
     turn = 1
 
     def defence_calc(attacker_attack_stat, target_defence_stat):
-        if target_defence_stat >= attacker_attack_stat:
-            return attacker_attack_stat / 2
+
+        if target_defence_stat >= 100:
+            return 0
         else:
-            return attacker_attack_stat * (1 - ((target_defence_stat / attacker_attack_stat) / 2))
+            if target_defence_stat >= attacker_attack_stat:
+                return attacker_attack_stat / 2
+            else:
+                return attacker_attack_stat * (1 - ((target_defence_stat / attacker_attack_stat) / 2))
 
     currentenemy = copy.deepcopy(enemyTemplates[enemy.lower()])
     currentenemy["name"] = enemyTemplates[enemy.lower()]["titles"][
@@ -1060,7 +1064,7 @@ def battle(enemy):
                     print("No Skills!!")
                     action()
 
-            elif choice == "UPGRADE" or choice == "6":
+            elif choice == "UPGRADE" or choice == "5":
                 print("""
                 Choose Your Upgrade
                 [BACK] to exit
@@ -1152,11 +1156,11 @@ def battle(enemy):
 
             print()
             nextaction = input(
-                "Choose your action [ ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
+                "Choose your action [ ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / UPGRADE - 5 ]: ")
             print()
-            while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "SKILL" and nextaction.upper() != "ITEM" and nextaction.upper() != "RUN" and nextaction.upper() != "UPGRADE" and nextaction != "1" and nextaction != "2" and nextaction != "3" and nextaction != "4" and nextaction != "5" and nextaction != "6":
+            while nextaction.upper() != "ATK" and nextaction.upper() != "DEF" and nextaction.upper() != "SKILL" and nextaction.upper() != "ITEM" and nextaction.upper() != "UPGRADE" and nextaction != "1" and nextaction != "2" and nextaction != "3" and nextaction != "4" and nextaction != "5":
                 nextaction = input(
-                    "Choose your action [ ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / RUN - 5 / UPGRADE - 6 ]: ")
+                    "Choose your action [ ATK - 1 / DEF - 2 / SKILL - 3 / ITEM - 4 / UPGRADE - 5 ]: ")
                 print()
 
             activity(nextaction)
