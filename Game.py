@@ -989,17 +989,14 @@ def battle(enemy):
 
         def activity(choice):
 
-            print(battleLog)
             last_cpu_action = str(battleLog[len(battleLog) - 1])
-            print(last_cpu_action)
 
             if not last_cpu_action.isdigit():
                 last_cpu_action = str(battleLog[len(battleLog) - 2])
-                print(last_cpu_action)
 
             cpuchoice = last_cpu_action[-1]
 
-            if str(battleLog[-1]) != ("turn"+str(turn)+"1") and str(battleLog[-1]) != ("turn"+str(turn)+"2") or cpuchoice == "t":
+            if str(battleLog[-1]) != ("turn"+str(turn)+"1") and str(battleLog[-1]) != ("turn"+str(turn)+"2") or cpuchoice == "done":
                 cpuchoice = random.randint(1, 2)
                 battleLog.append("turn"+str(turn)+str(cpuchoice))
 
@@ -1013,6 +1010,7 @@ def battle(enemy):
                     attack("enemy", math.ceil(defence_calc(plr["atk"], currentenemy["def"])), 0)
                     wait(1)
                     print()
+                    battleLog.append("done")
 
             elif choice == "SKILL" or choice == "3":
 
