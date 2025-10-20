@@ -24,7 +24,7 @@ def clear():
 # P[] is Perfect Ending route
 # S[] is Secret Ending
 
-global_speed = 11
+global_speed = 1
 # I want to be able to up the speed for testing
 
 story = {
@@ -286,34 +286,99 @@ story = {
             "type": 2,
 
             "options": ["Go over and talk to her", "Leave her be"],
-            "results": ["O97", "W98"],
+            "results": ["O97", "W11"],
             "delay": 1,
-        },
-
-        10: {
-            "speaker": "",
-            "message": "2 MONTHS LATER",
-            "speed": 0.7,
-            "type": 1,
-            "next": "W11",
-            "delay": 3,
         },
 
         11: {
-            "speaker": "",
-            "message": "As the thanks from the real but injured townspeople roar on, a few people lurk in the rubble still.",
-            "speed": 1.3,
-            "type": 1,
-            "next": "W7",
-            "delay": 1,
-        },
-
-        98: {
             "speaker": "Random Citizen",
             "message": "Thank you so much for saving us!!",
             "speed": 1.3,
             "type": 1,
-            "next": "I99",
+            "next": "W12",
+            "delay": 1,
+        },
+
+        12: {
+            "speaker": "Random Citizen",
+            "message": "It's alot to ask for our hero, but after our celebratory feast, may you stay and help us repair?",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W13",
+            "delay": 1,
+        },
+
+        13: {
+            "speaker": "",
+            "message": "The villagers stare at you with hope, it's clear they want you to stay and help out.",
+            "speed": 1,
+            "type": 2,
+
+            "options": ["Stay and help out", "Leave the village"],
+            "results": ["W14", "W97"],
+            "delay": 1,
+        },
+
+        14: {
+            "speaker": "Random Citizen",
+            "message": "Thank you so much!! My name is Shiny, i'm the village chief.",
+            "speed": 0.7,
+            "type": 1,
+            "next": "W15",
+            "delay": 3,
+        },
+
+        15: {
+            "speaker": "",
+            "message": "2 MONTHS LATER",
+            "speed": 0.7,
+            "type": 1,
+            "next": "W16",
+            "delay": 3,
+        },
+
+        16: {
+            "speaker": "",
+            "message": "After some time in this village, the town hails you as a hero, but a feeling of unease remains.",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W17",
+            "delay": 1,
+        },
+
+        17: {
+            "speaker": "Village Child",
+            "message": "AHHH! IT'S COMING!!",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W18",
+            "delay": 1,
+        },
+
+        18: {
+            "speaker": "",
+            "message": "During the time you were in the village, the creeping fear must've been this",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W99",
+            "delay": 1,
+        },
+
+        97: {
+            "speaker": "Random Citizen",
+            "message": "It's okay, hero! We still are pleased you saved us and will forever be in your debt!",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W98",
+            "delay": 1,
+        },
+
+        98: {
+            "speaker": "",
+            "message": "After a big feast to celebrate, you set off to explore the rest of this world, the village remembering you as a hero.",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W99",
             "delay": 1,
         },
 
@@ -1158,9 +1223,11 @@ def battle(enemy):
                     print()
                     showstats()
                     wait(3)
+                    clear()
                 break
             else:
                 print("Level MAX!")
+                clear()
 
             print()
 
@@ -1201,6 +1268,7 @@ if not specialStory:
         wait(2)
         animatetxt("You have no other choice", 0.3)
         battle("Shapeshifter")
+        clear()
         storymanager("W1")
 
     clear()
