@@ -286,7 +286,7 @@ story = {
             "type": 2,
 
             "options": ["Go over and talk to her", "Leave her be"],
-            "results": ["O97", "W11"],
+            "results": ["O1", "W11"],
             "delay": 1,
         },
 
@@ -322,7 +322,7 @@ story = {
         14: {
             "speaker": "Random Citizen",
             "message": "Thank you so much!! My name is Shiny, i'm the village chief.",
-            "speed": 0.7,
+            "speed": 1.1,
             "type": 1,
             "next": "W15",
             "delay": 3,
@@ -334,7 +334,7 @@ story = {
             "speed": 0.7,
             "type": 1,
             "next": "W16",
-            "delay": 3,
+            "delay": 5,
         },
 
         16: {
@@ -357,10 +357,55 @@ story = {
 
         18: {
             "speaker": "",
-            "message": "During the time you were in the village, the creeping fear must've been this",
+            "message": "During the time you were in the village, the creeping fear must've been this.",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W19",
+            "delay": 1,
+        },
+
+        19: {
+            "speaker": "",
+            "message": "An explosion roars out and the child shouts as they blow away in the shockwave.",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W20",
+            "delay": 1,
+        },
+
+        20: {
+            "speaker": "",
+            "message": "Out of the dust and debris, there stands...",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W21",
+            "delay": 1,
+        },
+
+        21: {
+            "speaker": "Shiny",
+            "message": "IT'S THE DEMON LORD!! EVERYONE, EVACUATE IF YOU CAN!",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W22",
+            "delay": 1,
+        },
+
+        22: {
+            "speaker": "",
+            "message": "As the Hero, you know what your job is.",
             "speed": 1.3,
             "type": 1,
             "next": "W99",
+            "delay": 1,
+        },
+
+        23: {
+            "speaker": "",
+            "message": "You've gotten stronger, so you're ready to face the demon lord.",
+            "speed": 1.3,
+            "type": 1,
+            "next": "W23",
             "delay": 1,
         },
 
@@ -1264,9 +1309,9 @@ if not specialStory:
         gameover("")
     else:
         print(enemyTemplates["shapeshifter"]["image"])
-        animatetxt("The... thing, it moves into your path", 0.3)
+        animatetxt("The... thing, it moves into your path", 0.7)
         wait(2)
-        animatetxt("You have no other choice", 0.3)
+        animatetxt("You have no other choice", 1)
         battle("Shapeshifter")
         clear()
         storymanager("W1")
@@ -1274,11 +1319,44 @@ if not specialStory:
     clear()
 
     if story["info"]["lastScene"] == "W98":
-        storymanager("W10")
+        print("""BAD ENDING
+        You lived a decent life, but the villagers of the town soon forgot about you as you did not help!""")
         print("<End of story>")
-    else:
-        #storymanager("O1")
+        wait(2)
+        gameover("")
+
+    if story["info"]["lastScene"] == "W22":
+        animatetxt("After being in the village and training, you've improved alot.", 1)
+        print("UPGRADES AVAILABLE")
+        plr["maxhp"] += 15
+        plr["maxmana"] += 30
+        plr["hp"] = plr["maxhp"]
+        plr["mana"] = plr["maxmana"]
+        plr["atk"] += 20
+        plr["def"] += 20
+        plr["skillpoints"] += 15
+
+        showstats()
+
+        wait(2)
+
+        animatetxt("Something about the Demon Lord feels like he might break a few rules...", 0.8)
+        wait(2)
+
+        battle("Finalboss")
+        clear()
+        animatetxt("You did it...", 0.8)
+        animatetxt("However, this really pushed you to your limits, and your arms seem permanently damaged.", 1.3)
+        print("""OK ENDING
+        You lived a good life. The village citizens were saved, but the price of saving them was your arms! You don't regret it though.""")
         print("<End of story>")
+        wait(2)
+        gameover("")
+
+    if story["info"]["lastScene"] == "O3":
+        print("<End of this path FOR NOW>")
+        wait(2)
+        gameover("")
 
 elif plr["name"].upper() == "CLOVII":
     animatetxt("Just because I added a story to the base game doesn't mean that you get to do whatever you want now!",
