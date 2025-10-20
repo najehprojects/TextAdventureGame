@@ -24,8 +24,8 @@ def clear():
 # P[] is Perfect Ending route
 # S[] is Secret Ending
 
-global_speed = 11
-# I want to be able to up the speed for testing
+global_speed = 1
+# Speed for testing
 
 story = {
 
@@ -420,7 +420,7 @@ story = {
 
         98: {
             "speaker": "",
-            "message": "After a big feast to celebrate, you set off to explore the rest of this world, the village remembering you as a hero.",
+            "message": "After a big feast to celebrate, you set off to explore the rest of this world.",
             "speed": 1.3,
             "type": 1,
             "next": "W99",
@@ -492,6 +492,7 @@ skillShop = {
         1: {
             "spcost": 3,
             "name": "Low Heal",
+            "desc": "A healing spell that restores 10 Health!",
 
             "type": 3,
 
@@ -504,6 +505,7 @@ skillShop = {
         2: {
             "spcost": 3,
             "name": "Slice",
+            "desc": "A sword spell that deals 30 damage!",
 
             "type": 1,
 
@@ -516,6 +518,7 @@ skillShop = {
         3: {
             "spcost": 5,
             "name": "Heal",
+            "desc": "A healing move that restores 15% Health!",
 
             "type": 4,
 
@@ -528,6 +531,7 @@ skillShop = {
         4: {
             "spcost": 5,
             "name": "Slash",
+            "desc": "A sword spell that deals 20% damage!",
 
             "type": 2,
 
@@ -540,6 +544,7 @@ skillShop = {
         5: {
             "spcost": 10,
             "name": "Master Heal",
+            "desc": "A healing move that restores 50% Health!!",
 
             "type": 4,
 
@@ -552,6 +557,7 @@ skillShop = {
         6: {
             "spcost": 10,
             "name": "Execute",
+            "desc": "A sword spell that deals 65% damage!!!",
 
             "type": 2,
 
@@ -961,6 +967,8 @@ if not skipSelection:
 def battle(enemy):
     clear()
 
+    battleLog = ["1"]
+
     turn = 1
 
     def defence_calc(attacker_attack_stat, target_defence_stat):
@@ -981,7 +989,19 @@ def battle(enemy):
 
         def activity(choice):
 
-            cpuchoice = random.randint(1, 2)
+            print(battleLog)
+            last_cpu_action = str(battleLog[len(battleLog) - 1])
+            print(last_cpu_action)
+
+            if not last_cpu_action.isdigit():
+                last_cpu_action = str(battleLog[len(battleLog) - 2])
+                print(last_cpu_action)
+
+            cpuchoice = last_cpu_action[-1]
+
+            if str(battleLog[-1]) != ("turn"+str(turn)+"1") and str(battleLog[-1]) != ("turn"+str(turn)+"2") or cpuchoice == "t":
+                cpuchoice = random.randint(1, 2)
+                battleLog.append("turn"+str(turn)+str(cpuchoice))
 
             if choice == "ATK" or choice == "1":
                 if cpuchoice == 1:
@@ -1064,6 +1084,13 @@ def battle(enemy):
                     print("No Skills!!")
                     action()
 
+            elif choice == "ITEM" or choice == "4":
+                if len(plr["inventory"]) <= 0:
+                    print("No Items!!")
+                    action()
+                else:
+                    print("Items found!")
+
             elif choice == "UPGRADE" or choice == "5":
                 print("""
                 Choose Your Upgrade
@@ -1074,6 +1101,9 @@ def battle(enemy):
                     if not skillShop["skills"][i]["obtained"]:
                         print(str(i) + ":", "SKILL NAME:", "<" + skillShop["skills"][i]["name"] + ">")
                         print("SP COST:", skillShop["skills"][i]["spcost"])
+                        print("DESCRIPTION:", skillShop["skills"][i]["desc"])
+                        print("MANA COST:", skillShop["skills"][i]["manacost"])
+                        print()
 
                 chosenupgrade = input("Choose your Upgrade: ")
 
@@ -1113,16 +1143,18 @@ def battle(enemy):
 
             if currentenemy["hp"] >= 1:
 
-                if cpuchoice == 1:
+                if cpuchoice == 1 and battleLog[-1] != "done":
                     if choice == "DEF" or choice == "2":
                         print("You defended! DMG TAKEN DOWN")
                         attack("plr", math.ceil(defence_calc(currentenemy["atk"], plr["def"])), 0)
                         wait(1)
                         print()
+                        battleLog.append("done")
                     else:
                         attack("plr", currentenemy["atk"], 0)
                         wait(1)
                         print()
+                        battleLog.append("done")
 
             if choice == "2" and cpuchoice == 2 or choice == "DEF" and cpuchoice == 2:
                 print("Both Parties Defended! No Damage was taken or dealt!")
